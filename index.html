@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painting Estimation Engine — i3D Studio</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#0d0d0d; --surface:#141414; --card:#1a1a1a; --border:#2a2a2a;
+    --gold:#c9a84c; --gold-dim:#7a6530; --text:#f0ece4; --muted:#7a7570; --dim:#4a4540;
+    --green:#4caf7a; --red:#cf6679; --blue:#6495c4; --amber:#e0a855;
+  }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; min-height:100vh; }
+  input,select { background:#0d0d0d; border:1px solid var(--border); color:var(--text);
+    padding:7px 10px; border-radius:4px; font-size:13px; font-family:inherit;
+    outline:none; width:100%; transition:border-color .15s; }
+  input:focus,select:focus { border-color:var(--gold); }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; }
+  select { cursor:pointer; } select option { background:#1a1a1a; }
+  button { font-family:inherit; cursor:pointer; }
+  ::-webkit-scrollbar { width:5px; height:5px; }
+  ::-webkit-scrollbar-track { background:var(--surface); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+  /* TOPBAR */
+  #topbar { position:sticky; top:0; z-index:200; display:flex; align-items:center;
+    justify-content:space-between; padding:0 24px; height:56px;
+    background:var(--surface); border-bottom:1px solid var(--border); }
+  #logo-block { display:flex; align-items:center; gap:12px; }
+  #logo-box { width:34px; height:34px; background:var(--gold); border-radius:6px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:800; color:#000; }
+  #logo-title { font-size:14px; font-weight:700; letter-spacing:0.04em; }
+  #logo-sub { font-size:10px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+  #header-stats { display:flex; gap:24px; align-items:center; }
+  .hstat { text-align:right; }
+  .hstat-label { font-size:9px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+  .hstat-val { font-size:13px; font-weight:700; font-family:'Courier New',monospace; }
+  #btn-print { display:flex; align-items:center; gap:6px; background:transparent;
+    border:1px solid var(--border); color:var(--muted); padding:7px 14px;
+    border-radius:4px; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; transition:all .15s; }
+  #btn-print:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* TABS */
+  #tabbar { display:flex; background:var(--surface); border-bottom:1px solid var(--border);
+    padding:0 24px; overflow-x:auto; }
+  .tab-btn { background:transparent; border:none; border-bottom:2px solid transparent;
+    color:var(--muted); padding:14px 18px; font-size:10px; letter-spacing:0.12em;
+    text-transform:uppercase; white-space:nowrap; transition:all .15s; font-weight:400; }
+  .tab-btn.active { color:var(--gold); border-bottom-color:var(--gold); font-weight:700; }
+  .tab-btn:hover:not(.active) { color:var(--text); }
+
+  /* CONTENT */
+  #content { padding:24px; max-width:1200px; margin:0 auto; }
+  .tab-panel { display:none; } .tab-panel.active { display:block; }
+
+  /* SHARED */
+  .label { font-size:10px; letter-spacing:0.12em; color:var(--muted); text-transform:uppercase; display:block; margin-bottom:4px; }
+  .field { display:flex; flex-direction:column; }
+  .stat-cards { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+  .stat-card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:16px 18px; flex:1; min-width:150px; }
+  .stat-card-label { font-size:9px; letter-spacing:0.12em; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+  .stat-card-val { font-size:22px; font-weight:700; font-family:'Courier New',monospace; }
+  .stat-card-sub { font-size:11px; color:var(--muted); margin-top:4px; }
+  .sec-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .sec-hdr-l { display:flex; align-items:center; gap:10px; }
+  .sec-bar { width:3px; height:18px; background:var(--gold); border-radius:2px; }
+  .sec-title { font-size:11px; letter-spacing:0.14em; color:var(--gold); text-transform:uppercase; font-weight:600; }
+  .add-btn { background:transparent; border:1px solid var(--gold-dim); color:var(--gold);
+    padding:6px 14px; border-radius:4px; font-size:11px; letter-spacing:0.1em;
+    text-transform:uppercase; transition:all .15s; }
+  .add-btn:hover { background:#c9a84c22; border-color:var(--gold); }
+  .del-btn { background:transparent; border:none; color:var(--dim); padding:2px 8px; font-size:18px; line-height:1; transition:color .15s; }
+  .del-btn:hover { color:var(--red); }
+  .info-bar { background:#c9a84c11; border:1px solid var(--gold-dim); border-left:3px solid var(--gold);
+    border-radius:6px; padding:12px 16px; margin-bottom:24px; font-size:12px; color:var(--muted); line-height:1.7; }
+  .info-bar strong { color:var(--gold); }
+  .grid-auto { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .grid-rate { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:10px; }
+
+  /* ACCORDION */
+  .room-card { background:var(--card); border:1px solid var(--border); border-radius:8px; margin-bottom:12px; overflow:hidden; }
+  .room-hdr { display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; background:#1e1e1e; cursor:pointer; user-select:none; }
+  .room-hdr:hover { background:#222; }
+  .room-hdr-l { display:flex; align-items:center; gap:10px; }
+  .room-num { font-size:10px; color:var(--gold-dim); font-family:monospace; min-width:22px; }
+  .room-hdr-r { display:flex; align-items:center; gap:14px; }
+  .room-stats { font-size:11px; color:var(--muted); }
+  .room-body { padding:16px; }
+
+  /* TABLES */
+  .dtbl { width:100%; border-collapse:collapse; font-size:12px; }
+  .dtbl th { padding:5px 8px; text-align:left; color:var(--muted); font-size:9px;
+    letter-spacing:0.1em; font-weight:400; text-transform:uppercase; }
+  .dtbl th.r { text-align:right; }
+  .dtbl td { padding:3px 5px; border-bottom:1px solid #ffffff08; vertical-align:middle; }
+  .dtbl td.r { text-align:right; padding-right:8px; }
+  .dtbl tfoot td { padding:6px 8px; font-size:11px; }
+  .ci { background:#0d0d0d; border:1px solid var(--border); color:var(--text);
+    padding:5px 6px; border-radius:4px; font-size:12px; font-family:inherit;
+    outline:none; width:100%; transition:border-color .15s; }
+  .ci:focus { border-color:var(--gold); }
+  .ci.r { text-align:right; }
+
+  .ded-box { margin-top:10px; background:#0d0d0d; border-radius:6px; padding:10px; border:1px solid var(--border); }
+  .ded-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .ded-title { font-size:9px; letter-spacing:0.12em; color:var(--muted); text-transform:uppercase; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .chip { background:#0d0d0d; border-radius:6px; padding:7px 12px; font-size:12px; }
+  .chip-l { color:var(--muted); }
+  .rate-card { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:12px 14px; }
+  .rate-inner { display:flex; align-items:center; gap:6px; }
+
+  /* ABSTRACT */
+  .abs-wrap { background:var(--card); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:16px; }
+  .abs-wrap table { width:100%; border-collapse:collapse; }
+  .abs-wrap thead th { padding:10px; background:#1e1e1e; border-bottom:1px solid var(--border);
+    font-size:9px; letter-spacing:0.1em; color:var(--muted); font-weight:400; text-align:left; }
+  .abs-wrap thead th.r { text-align:right; }
+  .abs-wrap tbody td { padding:4px 8px; border-bottom:1px solid #ffffff08; vertical-align:middle; }
+  .abs-wrap tbody td.r { text-align:right; }
+  .abs-wrap tfoot td { padding:12px 10px; background:#0d0d0d; border-top:1px solid var(--border); }
+  .pay-card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:16px; margin-top:16px; }
+
+  /* PRINT */
+  @media print {
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+    body{background:#fff!important;color:#111!important;}
+    #topbar,#tabbar,.add-btn,.del-btn,#btn-print,.no-print{display:none!important;}
+    #content{padding:0!important;max-width:100%!important;}
+    .tab-panel{display:none!important;}
+    #print-area{display:block!important;}
+    .pr-hdr{display:flex;justify-content:space-between;align-items:flex-start;
+      padding-bottom:14px;border-bottom:3px solid #c9a84c;margin-bottom:20px;}
+    .pr-logo{font-size:22px;font-weight:800;letter-spacing:0.06em;}
+    .pr-logo-sub{font-size:9px;color:#666;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;}
+    .pr-est-title{font-size:15px;font-weight:700;color:#c9a84c;letter-spacing:0.06em;text-align:right;}
+    .pr-meta{font-size:11px;color:#444;margin-top:4px;text-align:right;}
+    .pr-sec{font-weight:700;font-size:10px;letter-spacing:0.1em;color:#c9a84c;margin:16px 0 8px;text-transform:uppercase;}
+    .pr-info{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12px;}
+    .pr-info td{padding:4px 8px;}
+    .pr-info td:first-child{color:#666;width:140px;}
+    .pr-info td:last-child{font-weight:600;}
+    .pr-tbl{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px;}
+    .pr-tbl th{padding:7px 8px;background:#f5f0e8;font-size:9px;font-weight:700;
+      letter-spacing:0.08em;border-bottom:2px solid #c9a84c;text-align:left;}
+    .pr-tbl th.r{text-align:right;}
+    .pr-tbl td{padding:5px 8px;border-bottom:1px solid #eee;}
+    .pr-tbl td.r{text-align:right;}
+    .pr-tbl tfoot td{padding:9px 8px;background:#f5f0e8;font-weight:800;border-top:2px solid #c9a84c;}
+    .pr-tbl tfoot td.r{text-align:right;font-size:15px;color:#2d6a2d;}
+    .pr-area-box{border:1px solid #ddd;border-radius:4px;padding:12px 14px;margin-bottom:16px;}
+    .pr-footer{border-top:1px solid #ddd;padding-top:12px;margin-top:20px;
+      display:flex;justify-content:space-between;color:#999;font-size:10px;}
+  }
+  @media screen{#print-area{display:none;}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div id="logo-block">
+    <div id="logo-box">i3</div>
+    <div>
+      <div id="logo-title">Painting Estimation Engine</div>
+      <div id="logo-sub">i3D Studio — Coimbatore</div>
+    </div>
+  </div>
+  <div id="header-stats">
+    <div class="hstat"><div class="hstat-label">Interior</div><div class="hstat-val" id="hs-int" style="color:var(--text)">— sft</div></div>
+    <div class="hstat"><div class="hstat-label">Exterior</div><div class="hstat-val" id="hs-ext" style="color:var(--text)">— sft</div></div>
+    <div class="hstat"><div class="hstat-label">D&W Enamel</div><div class="hstat-val" id="hs-en" style="color:var(--text)">— sft</div></div>
+    <div class="hstat"><div class="hstat-label">BOQ Total</div><div class="hstat-val" id="hs-tot" style="color:var(--gold)">₹ —</div></div>
+  </div>
+  <button id="btn-print" onclick="doPrint()">🖨 Print / PDF</button>
+</div>
+
+<!-- TABBAR -->
+<div id="tabbar">
+  <button class="tab-btn active" data-tab="setup">Project Setup</button>
+  <button class="tab-btn" data-tab="interior">Interior Rooms</button>
+  <button class="tab-btn" data-tab="exterior">Exterior Walls</button>
+  <button class="tab-btn" data-tab="enamel">Enamel — D&W</button>
+  <button class="tab-btn" data-tab="special">Special Finishes</button>
+  <button class="tab-btn" data-tab="abstract">Final Abstract</button>
+</div>
+
+<div id="content">
+<div id="print-area"></div>
+
+<!-- ── TAB: PROJECT SETUP ── -->
+<div class="tab-panel active" id="tab-setup">
+  <div class="info-bar">
+    <strong>Painting Category Logic:</strong>
+    Economy (₹50–80) covers standard emulsion on primer. Standard (₹80–120) includes putty + emulsion.
+    Premium (₹120–180) adds texture, special finishes. Luxury (₹180–250) covers imported paints, melamyne polish, full putty + premium emulsion.
+    Rates exclude GST. Compound / Roof Tiles listed separately.
+  </div>
+  <div class="sec-hdr"><div class="sec-hdr-l"><div class="sec-bar"></div><div class="sec-title">Project Information</div></div></div>
+  <div class="grid-auto" style="margin-bottom:24px">
+    <div class="field"><span class="label">Project Name</span><input id="p-name" placeholder="e.g. Antony Residence"></div>
+    <div class="field"><span class="label">Client Name</span><input id="p-client" placeholder="Client name"></div>
+    <div class="field"><span class="label">Location</span><input id="p-location" placeholder="City / Site"></div>
+    <div class="field"><span class="label">Date</span><input id="p-date" type="date"></div>
+    <div class="field"><span class="label">Prepared By</span><input id="p-prepby" value="Shakhith"></div>
+    <div class="field"><span class="label">Scope of Work</span>
+      <select id="p-scope">
+        <option>Interior Only</option><option>Exterior Only</option>
+        <option selected>Interior + Exterior</option><option>Interior + Exterior + Special</option>
+      </select>
+    </div>
+    <div class="field"><span class="label">Painting Category</span>
+      <select id="p-category">
+        <option>Economy (₹50–80/sft)</option><option>Standard (₹80–120/sft)</option>
+        <option selected>Premium (₹120–180/sft)</option><option>Luxury (₹180–250/sft)</option>
+      </select>
+    </div>
+    <div class="field"><span class="label">Civil Cost (₹)</span><input id="p-civil" type="number" placeholder="e.g. 20000000"></div>
+  </div>
+  <div class="sec-hdr"><div class="sec-hdr-l"><div class="sec-bar"></div><div class="sec-title">Default Rate Benchmarks (₹ / sft)</div></div></div>
+  <div class="grid-rate" style="margin-bottom:24px">
+    <div class="rate-card"><span class="label">Interior Ceiling</span><div class="rate-inner"><span style="color:var(--muted);font-size:12px">₹</span><input id="r-ic" class="ci r" type="number" value="9"><span style="color:var(--muted);font-size:11px">/sft</span></div></div>
+    <div class="rate-card"><span class="label">Interior Wall</span><div class="rate-inner"><span style="color:var(--muted);font-size:12px">₹</span><input id="r-iw" class="ci r" type="number" value="9"><span style="color:var(--muted);font-size:11px">/sft</span></div></div>
+    <div class="rate-card"><span class="label">Exterior Wall</span><div class="rate-inner"><span style="color:var(--muted);font-size:12px">₹</span><input id="r-ext" class="ci r" type="number" value="14"><span style="color:var(--muted);font-size:11px">/sft</span></div></div>
+    <div class="rate-card"><span class="label">Enamel (D&W)</span><div class="rate-inner"><span style="color:var(--muted);font-size:12px">₹</span><input id="r-en" class="ci r" type="number" value="15"><span style="color:var(--muted);font-size:11px">/sft</span></div></div>
+    <div class="rate-card"><span class="label">Texture</span><div class="rate-inner"><span style="color:var(--muted);font-size:12px">₹</span><input id="r-tx" class="ci r" type="number" value="60"><span style="color:var(--muted);font-size:11px">/sft</span></div></div>
+    <div class="rate-card"><span class="label">Compound Wall</span><div class="rate-inner"><span style="color:var(--muted);font-size:12px">₹</span><input id="r-cw" class="ci r" type="number" value="10"><span style="color:var(--muted);font-size:11px">/sft</span></div></div>
+  </div>
+  <div class="field"><span class="label">Additional Notes</span><input id="p-notes" placeholder="e.g. Full putty to all interior, texture only on feature wall..."></div>
+</div>
+
+<!-- ── TAB: INTERIOR ROOMS ── -->
+<div class="tab-panel" id="tab-interior">
+  <div class="stat-cards" id="int-stats"></div>
+  <div class="sec-hdr">
+    <div class="sec-hdr-l"><div class="sec-bar"></div><div class="sec-title">Room-by-Room Interior Estimation</div></div>
+    <button class="add-btn" onclick="addRoom()">+ Add Room</button>
+  </div>
+  <div id="rooms-list"></div>
+  <div id="int-summ" style="display:none;margin-top:8px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      <table class="dtbl">
+        <thead><tr>
+          <th>Room</th><th class="r">L</th><th class="r">B</th><th class="r">H</th>
+          <th class="r">Ceiling (sft)</th><th class="r">Nett Walls (sft)</th><th class="r">Total (sft)</th>
+        </tr></thead>
+        <tbody id="int-summ-body"></tbody>
+        <tfoot><tr style="background:#0d0d0d;border-top:1px solid var(--border)">
+          <td colspan="4" style="color:var(--gold);font-weight:700;font-size:11px;letter-spacing:0.1em;padding:8px 10px">TOTALS</td>
+          <td class="r" id="s-ceil" style="color:var(--gold);font-weight:700;padding:8px"></td>
+          <td class="r" id="s-wall" style="color:var(--gold);font-weight:700;padding:8px"></td>
+          <td class="r" id="s-tot"  style="color:var(--green);font-weight:700;padding:8px"></td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB: EXTERIOR WALLS ── -->
+<div class="tab-panel" id="tab-exterior">
+  <div class="stat-cards" id="ext-stats"></div>
+  <div class="sec-hdr">
+    <div class="sec-hdr-l"><div class="sec-bar" style="background:var(--blue)"></div><div class="sec-title" style="color:var(--blue)">Exterior Wall Sections</div></div>
+    <button class="add-btn" onclick="addExtSec()">+ Add Section</button>
+  </div>
+  <div id="ext-list"></div>
+</div>
+
+<!-- ── TAB: ENAMEL D&W ── -->
+<div class="tab-panel" id="tab-enamel">
+  <div class="stat-cards" id="en-stats"></div>
+  <div class="sec-hdr">
+    <div class="sec-hdr-l"><div class="sec-bar" style="background:var(--amber)"></div><div class="sec-title" style="color:var(--amber)">Enamel — Doors, Windows & Metal Work</div></div>
+    <button class="add-btn" onclick="addEnGroup()">+ Add Group</button>
+  </div>
+  <div id="en-list"></div>
+</div>
+
+<!-- ── TAB: SPECIAL FINISHES ── -->
+<div class="tab-panel" id="tab-special">
+  <div class="sec-hdr">
+    <div class="sec-hdr-l"><div class="sec-bar" style="background:var(--blue)"></div><div class="sec-title">Special Finishes — Texture / Polish / Coatings</div></div>
+    <button class="add-btn" onclick="addSpecial()">+ Add Item</button>
+  </div>
+  <div id="sp-list"></div>
+</div>
+
+<!-- ── TAB: FINAL ABSTRACT ── -->
+<div class="tab-panel" id="tab-abstract">
+  <div class="stat-cards" id="abs-stats"></div>
+  <div class="sec-hdr">
+    <div class="sec-hdr-l"><div class="sec-bar"></div><div class="sec-title">Final Abstract — Painting BOQ</div></div>
+    <button class="add-btn" onclick="addAbsRow()">+ Add Line</button>
+  </div>
+  <div class="abs-wrap">
+    <table>
+      <thead><tr>
+        <th style="width:34px">#</th>
+        <th style="width:110px">Floor / Area</th>
+        <th>Description</th>
+        <th style="width:200px">Paint System</th>
+        <th style="width:120px">Status</th>
+        <th class="r" style="width:90px">Area (sft)</th>
+        <th class="r" style="width:80px">Rate (₹)</th>
+        <th class="r" style="width:110px">Amount (₹)</th>
+        <th style="width:30px"></th>
+      </tr></thead>
+      <tbody id="abs-body"></tbody>
+      <tfoot><tr>
+        <td colspan="7" style="color:var(--gold);font-weight:700;font-size:12px;letter-spacing:0.1em">GRAND TOTAL — PAINTING CONTRACT</td>
+        <td class="r" id="abs-grand" style="color:var(--green);font-weight:800;font-size:18px;font-family:'Courier New',monospace"></td>
+        <td></td>
+      </tr></tfoot>
+    </table>
+  </div>
+  <div class="pay-card">
+    <div class="sec-hdr">
+      <div class="sec-hdr-l"><div class="sec-bar" style="background:var(--green)"></div><div class="sec-title" style="color:var(--green)">Payment Tracker</div></div>
+      <button class="add-btn" onclick="addPayment()">+ Add Payment</button>
+    </div>
+    <div class="stat-cards" id="pay-stats"></div>
+    <table class="dtbl">
+      <thead><tr>
+        <th>Date</th><th>Mode</th><th class="r">Amount (₹)</th>
+        <th>Remarks</th><th class="r">Running Total</th><th></th>
+      </tr></thead>
+      <tbody id="pay-body"></tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ═══════════════ DATA ═══════════════
+const PAINT_SYS=['2C Putty + 2C Tractor Emulsion','Primer + Tractor Emulsion','Primer + Asian Ultima (Exterior)',
+  'Primer + Ace (Exterior)','Primer + Apex (Exterior)','Satin Enamel','Enamel Repainting',
+  'Texture Painting','Kottayam White Cement','Melamyne Full Polish','Tile Guard Coating','Custom'];
+const STATUS=['Completed','In Progress','To Be Carried','Pending'];
+const FLOORS=['Ground Floor','First Floor','Second Floor','Upper Floor','Exterior','Compound','Roof','Staircase','Other'];
+const EN_CATS=['Doors','Windows','Grilles & Gates','Racks & Almiras','Metal Staircase','Structural Steel','Other'];
+const MODES=['Cash in Hand','Bank Transfer','UPI','Cheque'];
+const CONDS=['New','Old','Repaint'];
+const SP_SYS=['Texture Painting','Kottayam White Cement','Melamyne Full Polish','Tile Guard Coating','Weatherproof Coating','Anti-fungal Treatment','Other'];
+
+let rooms=[],extSecs=[],enGroups=[],specials=[],absRows=[],payments=[];
+let _id=0;
+const uid=()=>++_id;
+
+// ═══════════════ HELPERS ═══════════════
+const n=(v,d=0)=>isNaN(parseFloat(v))?d:parseFloat(v);
+const fm=v=>v===0?'—':v.toLocaleString('en-IN',{maximumFractionDigits:2});
+const fc=v=>v===0?'—':'₹'+v.toLocaleString('en-IN',{maximumFractionDigits:0});
+const $=id=>document.getElementById(id);
+const opts=(arr,val)=>arr.map(o=>`<option${o===val?' selected':''}>${o}</option>`).join('');
+const sc=(lbl,val,sub,col)=>`<div class="stat-card">
+  <div class="stat-card-label">${lbl}</div>
+  <div class="stat-card-val" style="color:${col||'var(--gold)'}"> ${val}</div>
+  ${sub?`<div class="stat-card-sub">${sub}</div>`:''}
+</div>`;
+
+// ═══════════════ TABS ═══════════════
+document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  $('tab-'+b.dataset.tab).classList.add('active');
+}));
+
+// ═══════════════ CALC HELPERS ═══════════════
+function roomCalc(r){
+  const ceil=n(r.l)*n(r.b);
+  const gross=2*(n(r.l)+n(r.b))*n(r.h);
+  const deds=r.deds.reduce((s,d)=>s+n(d.w)*n(d.h)*n(d.cnt,1),0);
+  const adds=r.adds.reduce((s,a)=>s+n(a.l)*n(a.b)*n(a.cnt,1),0);
+  return{ceil,gross,deds,adds,nett:gross-deds+adds};
+}
+function extCalc(s){
+  const gross=s.rows.reduce((a,r)=>a+n(r.l)*(n(r.b)||1)*(n(r.h)||1)*n(r.cnt,1),0);
+  const ded=s.deds.reduce((a,d)=>a+n(d.w)*n(d.h)*n(d.cnt,1),0);
+  return{gross,ded,nett:gross-ded};
+}
+const enRowA=r=>n(r.l)*n(r.b)*n(r.sides,2)*n(r.cnt,1);
+const enGrpTot=g=>g.rows.reduce((a,r)=>a+enRowA(r),0);
+
+// ═══════════════════════════════════════════
+//  INTERIOR — direct DOM update strategy
+//  Render once; then update data+chips+stats
+//  only. Never re-render on text input.
+// ═══════════════════════════════════════════
+function addRoom(){
+  const id=uid();
+  rooms.push({id,name:'',l:'',b:'',h:'',deds:[],adds:[],notes:'',open:true});
+  renderRooms(); recalc();
+}
+function delRoom(id){ rooms=rooms.filter(r=>r.id!==id); renderRooms(); recalc(); }
+function toggleRoom(id){
+  const r=rooms.find(x=>x.id===id); if(!r)return;
+  r.open=!r.open;
+  const body=$('rb-'+id), arr=$('ra-'+id);
+  if(body){ body.style.display=r.open?'block':'none'; }
+  if(arr){ arr.textContent=r.open?'▲':'▼'; }
+}
+
+// Text/number fields — update data only, update chips+header stat, no full re-render
+function rUpd(id,field,val){
+  const r=rooms.find(x=>x.id===id); if(!r)return;
+  r[field]=val;
+  updateRoomChips(id);
+  updateRoomHdrStat(id);
+  recalc();
+}
+
+function updateRoomChips(id){
+  const r=rooms.find(x=>x.id===id); if(!r)return;
+  const c=roomCalc(r);
+  const el=$('chips-'+id); if(!el)return;
+  el.innerHTML=[
+    {l:'Ceiling',v:c.ceil,a:''},
+    {l:'Gross Walls',v:c.gross,a:''},
+    {l:'Deductions',v:c.deds,a:'color:var(--red)'},
+    {l:'Additions',v:c.adds,a:'color:var(--green)'},
+    {l:'Nett Walls',v:c.nett,a:'color:var(--gold)'},
+  ].map(x=>`<div class="chip"><span class="chip-l">${x.l}: </span><span style="font-weight:600;${x.a}">${fm(Math.abs(x.v))} sft</span></div>`).join('');
+}
+function updateRoomHdrStat(id){
+  const r=rooms.find(x=>x.id===id); if(!r)return;
+  const c=roomCalc(r);
+  const el=$('rs-'+id); if(!el)return;
+  el.innerHTML=`Ceiling: <span style="color:var(--text)">${fm(c.ceil)}</span> | Walls: <span style="color:var(--gold)">${fm(c.nett)} sft</span>`;
+  const nl=$('rn-'+id); if(nl) nl.textContent=r.name||'Unnamed Room';
+}
+
+// Deductions
+function addDed(rid){
+  const r=rooms.find(x=>x.id===rid); if(!r)return;
+  r.deds.push({id:uid(),desc:'Door',w:'',h:'',cnt:1});
+  renderRooms(); recalc();
+}
+function delDed(rid,did){
+  const r=rooms.find(x=>x.id===rid); if(!r)return;
+  r.deds=r.deds.filter(d=>d.id!==did);
+  renderRooms(); recalc();
+}
+function dUpd(rid,did,field,val){
+  const r=rooms.find(x=>x.id===rid); if(!r)return;
+  const d=r.deds.find(x=>x.id===did); if(!d)return;
+  d[field]=val;
+  // update area cell only
+  const aEl=$('da-'+did);
+  if(aEl) aEl.textContent=fm(n(d.w)*n(d.h)*n(d.cnt,1))+' sft';
+  // update ded total
+  const dtEl=$('dt-'+rid);
+  if(dtEl) dtEl.textContent=fm(r.deds.reduce((s,x)=>s+n(x.w)*n(x.h)*n(x.cnt,1),0))+' sft';
+  updateRoomChips(rid); updateRoomHdrStat(rid); recalc();
+}
+
+// Additions
+function addAdd(rid){
+  const r=rooms.find(x=>x.id===rid); if(!r)return;
+  r.adds.push({id:uid(),desc:'Loft Posts',l:'',b:'',cnt:1});
+  renderRooms(); recalc();
+}
+function delAdd(rid,aid){
+  const r=rooms.find(x=>x.id===rid); if(!r)return;
+  r.adds=r.adds.filter(a=>a.id!==aid);
+  renderRooms(); recalc();
+}
+function aUpd(rid,aid,field,val){
+  const r=rooms.find(x=>x.id===rid); if(!r)return;
+  const a=r.adds.find(x=>x.id===aid); if(!a)return;
+  a[field]=val;
+  const aEl=$('aa-'+aid);
+  if(aEl) aEl.textContent=fm(n(a.l)*n(a.b)*n(a.cnt,1))+' sft';
+  updateRoomChips(rid); updateRoomHdrStat(rid); recalc();
+}
+
+function renderRooms(){
+  const list=$('rooms-list'); if(!list)return;
+  if(!rooms.length){
+    list.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted);border:1px dashed var(--border);border-radius:8px">No rooms added. Click "+ Add Room" to begin.</div>`;
+    $('int-summ').style.display='none'; return;
+  }
+  list.innerHTML=rooms.map((r,i)=>{
+    const c=roomCalc(r);
+    return `<div class="room-card">
+      <div class="room-hdr" onclick="toggleRoom(${r.id})">
+        <div class="room-hdr-l">
+          <span class="room-num">${String(i+1).padStart(2,'0')}</span>
+          <span id="rn-${r.id}" style="font-weight:500;font-size:14px;color:${r.name?'var(--text)':'var(--muted)'}">${r.name||'Unnamed Room'}</span>
+        </div>
+        <div class="room-hdr-r">
+          <span class="room-stats" id="rs-${r.id}">Ceiling: <span style="color:var(--text)">${fm(c.ceil)}</span> | Walls: <span style="color:var(--gold)">${fm(c.nett)} sft</span></span>
+          <button class="del-btn" onclick="event.stopPropagation();delRoom(${r.id})">×</button>
+          <span id="ra-${r.id}" style="color:var(--dim);font-size:12px">${r.open?'▲':'▼'}</span>
+        </div>
+      </div>
+      <div id="rb-${r.id}" style="display:${r.open?'block':'none'}">
+      <div class="room-body">
+        <div class="grid-4" style="margin-bottom:14px">
+          <div class="field"><span class="label">Room Name</span>
+            <input class="ci" value="${r.name}" placeholder="e.g. Hall" oninput="rUpd(${r.id},'name',this.value)">
+          </div>
+          <div class="field"><span class="label">Length (ft)</span>
+            <input class="ci r" type="number" value="${r.l}" placeholder="0.00" oninput="rUpd(${r.id},'l',this.value)">
+          </div>
+          <div class="field"><span class="label">Breadth (ft)</span>
+            <input class="ci r" type="number" value="${r.b}" placeholder="0.00" oninput="rUpd(${r.id},'b',this.value)">
+          </div>
+          <div class="field"><span class="label">Height (ft)</span>
+            <input class="ci r" type="number" value="${r.h}" placeholder="0.00" oninput="rUpd(${r.id},'h',this.value)">
+          </div>
+        </div>
+        <div class="chips" id="chips-${r.id}">
+          ${[{l:'Ceiling',v:c.ceil,a:''},{l:'Gross Walls',v:c.gross,a:''},{l:'Deductions',v:c.deds,a:'color:var(--red)'},{l:'Additions',v:c.adds,a:'color:var(--green)'},{l:'Nett Walls',v:c.nett,a:'color:var(--gold)'}].map(x=>`<div class="chip"><span class="chip-l">${x.l}: </span><span style="font-weight:600;${x.a}">${fm(Math.abs(x.v))} sft</span></div>`).join('')}
+        </div>
+        <div class="ded-box">
+          <div class="ded-hdr"><span class="ded-title">Deductions — Doors / Windows / Opens</span><button class="add-btn" onclick="addDed(${r.id})">+ Add</button></div>
+          ${r.deds.length?`<table class="dtbl">
+            <thead><tr><th>Description</th><th>W (ft)</th><th>H (ft)</th><th>Count</th><th class="r">Area (sft)</th><th></th></tr></thead>
+            <tbody>${r.deds.map(d=>`<tr>
+              <td><input class="ci" value="${d.desc}" oninput="dUpd(${r.id},${d.id},'desc',this.value)"></td>
+              <td><input class="ci r" type="number" value="${d.w}" placeholder="W" style="width:60px" oninput="dUpd(${r.id},${d.id},'w',this.value)"></td>
+              <td><input class="ci r" type="number" value="${d.h}" placeholder="H" style="width:60px" oninput="dUpd(${r.id},${d.id},'h',this.value)"></td>
+              <td><input class="ci r" type="number" value="${d.cnt}" placeholder="1" style="width:50px" oninput="dUpd(${r.id},${d.id},'cnt',this.value)"></td>
+              <td class="r" id="da-${d.id}" style="color:var(--muted)">${fm(n(d.w)*n(d.h)*n(d.cnt,1))} sft</td>
+              <td><button class="del-btn" onclick="delDed(${r.id},${d.id})">×</button></td>
+            </tr>`).join('')}</tbody>
+            <tfoot><tr><td colspan="4" style="color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:0.1em">Total Deductions</td>
+              <td class="r" id="dt-${r.id}" style="color:var(--amber);font-weight:600">${fm(r.deds.reduce((s,d)=>s+n(d.w)*n(d.h)*n(d.cnt,1),0))} sft</td><td></td>
+            </tr></tfoot>
+          </table>`:''}
+        </div>
+        <div class="ded-box" style="margin-top:8px">
+          <div class="ded-hdr"><span class="ded-title">Additions — Lofts / Posts / Jambs / Racks</span><button class="add-btn" onclick="addAdd(${r.id})">+ Add</button></div>
+          ${r.adds.length?`<table class="dtbl">
+            <thead><tr><th>Description</th><th>L (ft)</th><th>B (ft)</th><th>Count</th><th class="r">Area (sft)</th><th></th></tr></thead>
+            <tbody>${r.adds.map(a=>`<tr>
+              <td><input class="ci" value="${a.desc}" oninput="aUpd(${r.id},${a.id},'desc',this.value)"></td>
+              <td><input class="ci r" type="number" value="${a.l}" placeholder="L" style="width:60px" oninput="aUpd(${r.id},${a.id},'l',this.value)"></td>
+              <td><input class="ci r" type="number" value="${a.b}" placeholder="B" style="width:60px" oninput="aUpd(${r.id},${a.id},'b',this.value)"></td>
+              <td><input class="ci r" type="number" value="${a.cnt}" placeholder="1" style="width:50px" oninput="aUpd(${r.id},${a.id},'cnt',this.value)"></td>
+              <td class="r" id="aa-${a.id}" style="color:var(--green)">${fm(n(a.l)*n(a.b)*n(a.cnt,1))} sft</td>
+              <td><button class="del-btn" onclick="delAdd(${r.id},${a.id})">×</button></td>
+            </tr>`).join('')}</tbody>
+          </table>`:''}
+        </div>
+        <div class="field" style="margin-top:10px">
+          <span class="label">Notes</span>
+          <input class="ci" value="${r.notes}" placeholder="e.g. Full putty, texture accent wall..." oninput="rUpd(${r.id},'notes',this.value)">
+        </div>
+      </div></div>
+    </div>`;
+  }).join('');
+  renderIntSummary();
+}
+
+function renderIntSummary(){
+  const body=$('int-summ-body'); if(!body)return;
+  let tc=0,tw=0;
+  body.innerHTML=rooms.map(r=>{
+    const c=roomCalc(r); tc+=c.ceil; tw+=c.nett;
+    return `<tr>
+      <td style="padding:6px 10px">${r.name||'—'}</td>
+      <td class="r" style="color:var(--muted)">${r.l||'—'}</td>
+      <td class="r" style="color:var(--muted)">${r.b||'—'}</td>
+      <td class="r" style="color:var(--muted)">${r.h||'—'}</td>
+      <td class="r">${fm(c.ceil)}</td>
+      <td class="r" style="color:var(--gold)">${fm(c.nett)}</td>
+      <td class="r" style="color:var(--green);font-weight:600">${fm(c.ceil+c.nett)}</td>
+    </tr>`;
+  }).join('');
+  $('s-ceil').textContent=fm(tc);
+  $('s-wall').textContent=fm(tw);
+  $('s-tot').textContent=fm(tc+tw);
+  $('int-summ').style.display='block';
+}
+
+// ═══════════════════════════════════════════
+//  EXTERIOR — same strategy: render once,
+//  update individual cells on input
+// ═══════════════════════════════════════════
+function addExtSec(){
+  extSecs.push({id:uid(),name:'',rows:[{id:uid(),facing:'',desc:'',l:'',b:'',h:'',cnt:1,cond:'New'}],deds:[],open:true});
+  renderExt(); recalc();
+}
+function delExtSec(id){ extSecs=extSecs.filter(s=>s.id!==id); renderExt(); recalc(); }
+function toggleExt(id){
+  const s=extSecs.find(x=>x.id===id); if(!s)return;
+  s.open=!s.open;
+  const b=$('exb-'+id), a=$('exa-'+id);
+  if(b) b.style.display=s.open?'block':'none';
+  if(a) a.textContent=s.open?'▲':'▼';
+}
+function extNameUpd(id,val){
+  const s=extSecs.find(x=>x.id===id); if(!s)return;
+  s.name=val;
+  const el=$('exn-'+id); if(el) el.textContent=val||'Unnamed Section';
+  recalc();
+}
+function extRowUpd(sid,rid,field,val){
+  const s=extSecs.find(x=>x.id===sid); if(!s)return;
+  const r=s.rows.find(x=>x.id===rid); if(!r)return;
+  r[field]=val;
+  const area=n(r.l)*(n(r.b)||1)*(n(r.h)||1)*n(r.cnt,1);
+  const aEl=$('era-'+rid); if(aEl) aEl.textContent=fm(area);
+  updateExtHdrStat(sid); recalc();
+}
+function updateExtHdrStat(sid){
+  const s=extSecs.find(x=>x.id===sid); if(!s)return;
+  const t=extCalc(s);
+  const el=$('exs-'+sid); if(el) el.innerHTML=`Gross: <span style="color:var(--text)">${fm(t.gross)}</span> | Nett: <span style="color:var(--gold)">${fm(t.nett)} sft</span>`;
+  const ge=$('exg-'+sid); if(ge) ge.textContent='Gross: '+fm(t.gross)+' sft';
+  const ne=$('exnn-'+sid); if(ne) ne.textContent=fm(t.nett)+' sft';
+}
+function addExtRow(sid){
+  const s=extSecs.find(x=>x.id===sid); if(!s)return;
+  s.rows.push({id:uid(),facing:'',desc:'',l:'',b:'',h:'',cnt:1,cond:'New'});
+  renderExt(); recalc();
+}
+function delExtRow(sid,rid){
+  const s=extSecs.find(x=>x.id===sid); if(!s)return;
+  s.rows=s.rows.filter(r=>r.id!==rid);
+  renderExt(); recalc();
+}
+function addExtDed(sid){
+  const s=extSecs.find(x=>x.id===sid); if(!s)return;
+  s.deds.push({id:uid(),desc:'Window',w:'',h:'',cnt:1});
+  renderExt(); recalc();
+}
+function delExtDed(sid,did){
+  const s=extSecs.find(x=>x.id===sid); if(!s)return;
+  s.deds=s.deds.filter(d=>d.id!==did);
+  renderExt(); recalc();
+}
+function extDedUpd(sid,did,field,val){
+  const s=extSecs.find(x=>x.id===sid); if(!s)return;
+  const d=s.deds.find(x=>x.id===did); if(!d)return;
+  d[field]=val;
+  const aEl=$('eda-'+did); if(aEl) aEl.textContent=fm(n(d.w)*n(d.h)*n(d.cnt,1))+' sft';
+  updateExtHdrStat(sid); recalc();
+}
+
+function renderExt(){
+  const list=$('ext-list'); if(!list)return;
+  if(!extSecs.length){
+    list.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted);border:1px dashed var(--border);border-radius:8px">No sections added. Click "+ Add Section" to begin.</div>`;
+    return;
+  }
+  list.innerHTML=extSecs.map(s=>{
+    const t=extCalc(s);
+    return `<div class="room-card">
+      <div class="room-hdr" onclick="toggleExt(${s.id})">
+        <div class="room-hdr-l">
+          <div style="width:3px;height:16px;background:var(--blue);border-radius:2px"></div>
+          <span id="exn-${s.id}" style="font-weight:500;font-size:14px;color:${s.name?'var(--text)':'var(--muted)'}">${s.name||'Unnamed Section'}</span>
+        </div>
+        <div class="room-hdr-r">
+          <span class="room-stats" id="exs-${s.id}">Gross: <span style="color:var(--text)">${fm(t.gross)}</span> | Nett: <span style="color:var(--gold)">${fm(t.nett)} sft</span></span>
+          <button class="del-btn" onclick="event.stopPropagation();delExtSec(${s.id})">×</button>
+          <span id="exa-${s.id}" style="color:var(--dim);font-size:12px">${s.open?'▲':'▼'}</span>
+        </div>
+      </div>
+      <div id="exb-${s.id}" style="display:${s.open?'block':'none'}">
+      <div class="room-body">
+        <div style="margin-bottom:12px;max-width:320px">
+          <span class="label">Section Name</span>
+          <input class="ci" value="${s.name}" placeholder="e.g. South Side, Portico..." oninput="extNameUpd(${s.id},this.value)">
+        </div>
+        <table class="dtbl" style="margin-bottom:8px">
+          <thead><tr>
+            <th style="width:28px">#</th><th>Facing / Zone</th><th>Description</th>
+            <th>L</th><th>B</th><th>H</th><th>Count</th><th>Cond.</th>
+            <th class="r">Area (sft)</th><th></th>
+          </tr></thead>
+          <tbody>${s.rows.map((r,i)=>{
+            const area=n(r.l)*(n(r.b)||1)*(n(r.h)||1)*n(r.cnt,1);
+            return `<tr>
+              <td style="color:var(--dim);font-size:11px">${i+1}</td>
+              <td><input class="ci" value="${r.facing}" placeholder="South Side" oninput="extRowUpd(${s.id},${r.id},'facing',this.value)"></td>
+              <td><input class="ci" value="${r.desc}" placeholder="Ground Floor" oninput="extRowUpd(${s.id},${r.id},'desc',this.value)"></td>
+              <td><input class="ci r" type="number" value="${r.l}" placeholder="L" style="width:60px" oninput="extRowUpd(${s.id},${r.id},'l',this.value)"></td>
+              <td><input class="ci r" type="number" value="${r.b}" placeholder="B" style="width:50px" oninput="extRowUpd(${s.id},${r.id},'b',this.value)"></td>
+              <td><input class="ci r" type="number" value="${r.h}" placeholder="H" style="width:60px" oninput="extRowUpd(${s.id},${r.id},'h',this.value)"></td>
+              <td><input class="ci r" type="number" value="${r.cnt}" placeholder="1" style="width:45px" oninput="extRowUpd(${s.id},${r.id},'cnt',this.value)"></td>
+              <td><select class="ci" style="width:80px" onchange="extRowUpd(${s.id},${r.id},'cond',this.value)">${opts(CONDS,r.cond)}</select></td>
+              <td class="r" id="era-${r.id}" style="color:var(--gold);font-weight:500">${fm(area)}</td>
+              <td><button class="del-btn" onclick="delExtRow(${s.id},${r.id})">×</button></td>
+            </tr>`;
+          }).join('')}</tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <button class="add-btn" onclick="addExtRow(${s.id})">+ Add Row</button>
+          <span id="exg-${s.id}" style="font-size:11px;color:var(--muted)">Gross: ${fm(t.gross)} sft</span>
+        </div>
+        <div class="ded-box">
+          <div class="ded-hdr"><span class="ded-title">Deductions — Doors / Windows / Opens</span><button class="add-btn" onclick="addExtDed(${s.id})">+ Add</button></div>
+          ${s.deds.length?`<table class="dtbl">
+            <thead><tr><th>Description</th><th>W (ft)</th><th>H (ft)</th><th>Count</th><th class="r">Area (sft)</th><th></th></tr></thead>
+            <tbody>${s.deds.map(d=>`<tr>
+              <td><input class="ci" value="${d.desc}" oninput="extDedUpd(${s.id},${d.id},'desc',this.value)"></td>
+              <td><input class="ci r" type="number" value="${d.w}" style="width:60px" oninput="extDedUpd(${s.id},${d.id},'w',this.value)"></td>
+              <td><input class="ci r" type="number" value="${d.h}" style="width:60px" oninput="extDedUpd(${s.id},${d.id},'h',this.value)"></td>
+              <td><input class="ci r" type="number" value="${d.cnt}" style="width:50px" oninput="extDedUpd(${s.id},${d.id},'cnt',this.value)"></td>
+              <td class="r" id="eda-${d.id}" style="color:var(--muted)">${fm(n(d.w)*n(d.h)*n(d.cnt,1))} sft</td>
+              <td><button class="del-btn" onclick="delExtDed(${s.id},${d.id})">×</button></td>
+            </tr>`).join('')}</tbody>
+          </table>`:''}
+          ${t.ded>0?`<div style="margin-top:8px;padding:7px 12px;background:var(--card);border-radius:5px;display:flex;justify-content:space-between">
+            <span style="color:var(--muted);font-size:12px">Nett Painted Area:</span>
+            <span id="exnn-${s.id}" style="color:var(--green);font-weight:700">${fm(t.nett)} sft</span>
+          </div>`:''}
+        </div>
+      </div></div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+//  ENAMEL — same pattern
+// ═══════════════════════════════════════════
+function addEnGroup(){
+  enGroups.push({id:uid(),cat:'Doors',rows:[{id:uid(),room:'',desc:'',l:'',b:'',sides:2,cnt:1}],open:true});
+  renderEnamel(); recalc();
+}
+function delEnGroup(id){ enGroups=enGroups.filter(g=>g.id!==id); renderEnamel(); recalc(); }
+function toggleEn(id){
+  const g=enGroups.find(x=>x.id===id); if(!g)return;
+  g.open=!g.open;
+  const b=$('enb-'+id), a=$('ena-'+id);
+  if(b) b.style.display=g.open?'block':'none';
+  if(a) a.textContent=g.open?'▲':'▼';
+}
+function enCatUpd(id,val){
+  const g=enGroups.find(x=>x.id===id); if(!g)return;
+  g.cat=val;
+  const el=$('enc-'+id); if(el) el.textContent=val;
+  recalc();
+}
+function enRowUpd(gid,rid,field,val){
+  const g=enGroups.find(x=>x.id===gid); if(!g)return;
+  const r=g.rows.find(x=>x.id===rid); if(!r)return;
+  r[field]=val;
+  const area=enRowA(r);
+  const aEl=$('enra-'+rid); if(aEl) aEl.textContent=fm(area);
+  const tEl=$('ent-'+gid); if(tEl) tEl.textContent=fm(enGrpTot(g))+' sft';
+  const hEl=$('enh-'+gid); if(hEl) hEl.textContent=fm(enGrpTot(g))+' sft';
+  recalc();
+}
+function addEnRow(gid){
+  const g=enGroups.find(x=>x.id===gid); if(!g)return;
+  g.rows.push({id:uid(),room:'',desc:'',l:'',b:'',sides:2,cnt:1});
+  renderEnamel(); recalc();
+}
+function delEnRow(gid,rid){
+  const g=enGroups.find(x=>x.id===gid); if(!g)return;
+  g.rows=g.rows.filter(r=>r.id!==rid);
+  renderEnamel(); recalc();
+}
+
+function renderEnamel(){
+  const list=$('en-list'); if(!list)return;
+  if(!enGroups.length){
+    list.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted);border:1px dashed var(--border);border-radius:8px">No groups added. Click "+ Add Group" to begin.</div>`;
+    return;
+  }
+  list.innerHTML=enGroups.map(g=>{
+    const gt=enGrpTot(g);
+    return `<div class="room-card">
+      <div class="room-hdr" onclick="toggleEn(${g.id})">
+        <div class="room-hdr-l">
+          <div style="width:3px;height:16px;background:var(--amber);border-radius:2px"></div>
+          <span id="enc-${g.id}" style="font-weight:500;font-size:14px">${g.cat}</span>
+        </div>
+        <div class="room-hdr-r">
+          <span id="enh-${g.id}" style="font-size:11px;color:var(--amber)">${fm(gt)} sft</span>
+          <button class="del-btn" onclick="event.stopPropagation();delEnGroup(${g.id})">×</button>
+          <span id="ena-${g.id}" style="color:var(--dim);font-size:12px">${g.open?'▲':'▼'}</span>
+        </div>
+      </div>
+      <div id="enb-${g.id}" style="display:${g.open?'block':'none'}">
+      <div class="room-body">
+        <div style="margin-bottom:12px;max-width:260px">
+          <span class="label">Category</span>
+          <select class="ci" onchange="enCatUpd(${g.id},this.value)">${opts(EN_CATS,g.cat)}</select>
+        </div>
+        <table class="dtbl" style="margin-bottom:8px">
+          <thead><tr>
+            <th>Room / Location</th><th>Description</th>
+            <th>L (ft)</th><th>B (ft)</th><th>Sides</th><th>Count</th>
+            <th class="r">Area (sft)</th><th></th>
+          </tr></thead>
+          <tbody>${g.rows.map(r=>`<tr>
+            <td><input class="ci" value="${r.room}" placeholder="Kitchen" oninput="enRowUpd(${g.id},${r.id},'room',this.value)"></td>
+            <td><input class="ci" value="${r.desc}" placeholder="Wall Mount Rack" oninput="enRowUpd(${g.id},${r.id},'desc',this.value)"></td>
+            <td><input class="ci r" type="number" value="${r.l}" placeholder="L" style="width:65px" oninput="enRowUpd(${g.id},${r.id},'l',this.value)"></td>
+            <td><input class="ci r" type="number" value="${r.b}" placeholder="B" style="width:65px" oninput="enRowUpd(${g.id},${r.id},'b',this.value)"></td>
+            <td><input class="ci r" type="number" value="${r.sides}" placeholder="2" style="width:50px" oninput="enRowUpd(${g.id},${r.id},'sides',this.value)"></td>
+            <td><input class="ci r" type="number" value="${r.cnt}" placeholder="1" style="width:50px" oninput="enRowUpd(${g.id},${r.id},'cnt',this.value)"></td>
+            <td class="r" id="enra-${r.id}" style="color:var(--amber);font-weight:500">${fm(enRowA(r))}</td>
+            <td><button class="del-btn" onclick="delEnRow(${g.id},${r.id})">×</button></td>
+          </tr>`).join('')}</tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <button class="add-btn" onclick="addEnRow(${g.id})">+ Add Row</button>
+          <span id="ent-${g.id}" style="font-size:12px;color:var(--amber);font-weight:600">${fm(gt)} sft</span>
+        </div>
+      </div></div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+//  SPECIAL FINISHES — update in place
+// ═══════════════════════════════════════════
+function addSpecial(){
+  specials.push({id:uid(),desc:'',area:'',sys:'Texture Painting',rate:'',status:'Completed'});
+  renderSpecials(); recalc();
+}
+function delSpecial(id){ specials=specials.filter(s=>s.id!==id); renderSpecials(); recalc(); }
+function spUpd(id,field,val){
+  const s=specials.find(x=>x.id===id); if(!s)return;
+  s[field]=val;
+  const amt=n(s.area)*n(s.rate);
+  // update amount display
+  const aEl=$('spa-'+id);
+  if(aEl){ aEl.style.display=amt>0?'flex':'none'; aEl.querySelector('span:last-child').textContent=fc(amt); }
+  recalc();
+}
+function renderSpecials(){
+  const list=$('sp-list'); if(!list)return;
+  if(!specials.length){
+    list.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted);border:1px dashed var(--border);border-radius:8px">No special finishes added yet.</div>`;
+    return;
+  }
+  list.innerHTML=specials.map(s=>{
+    const amt=n(s.area)*n(s.rate);
+    return `<div class="room-card" style="padding:16px;margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:2fr 1.5fr 100px 100px 140px 30px;gap:10px;align-items:end">
+        <div class="field"><span class="label">Description</span>
+          <input class="ci" value="${s.desc}" placeholder="Hall accent wall — texture" oninput="spUpd(${s.id},'desc',this.value)">
+        </div>
+        <div class="field"><span class="label">Paint System</span>
+          <select class="ci" onchange="spUpd(${s.id},'sys',this.value)">${opts(SP_SYS,s.sys)}</select>
+        </div>
+        <div class="field"><span class="label">Area (sft)</span>
+          <input class="ci r" type="number" value="${s.area}" placeholder="0.00" oninput="spUpd(${s.id},'area',this.value)">
+        </div>
+        <div class="field"><span class="label">Rate (₹/sft)</span>
+          <input class="ci r" type="number" value="${s.rate}" placeholder="0" oninput="spUpd(${s.id},'rate',this.value)">
+        </div>
+        <div class="field"><span class="label">Status</span>
+          <select class="ci" onchange="spUpd(${s.id},'status',this.value)">${opts(STATUS,s.status)}</select>
+        </div>
+        <div style="display:flex;align-items:flex-end;padding-bottom:2px">
+          <button class="del-btn" onclick="delSpecial(${s.id})">×</button>
+        </div>
+      </div>
+      <div id="spa-${s.id}" style="margin-top:10px;padding:8px 12px;background:#0d0d0d;border-radius:6px;display:${amt>0?'flex':'none'};justify-content:space-between">
+        <span style="color:var(--muted);font-size:12px">${s.desc||'Item'} — Amount</span>
+        <span style="color:var(--gold);font-weight:700">${fc(amt)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+//  ABSTRACT — update in place
+// ═══════════════════════════════════════════
+function addAbsRow(desc='',sys=PAINT_SYS[0],floor='Ground Floor'){
+  absRows.push({id:uid(),floor,desc,sys,status:'Completed',area:'',rate:'',amount:0});
+  renderAbstract(); recalc();
+}
+function delAbsRow(id){ absRows=absRows.filter(r=>r.id!==id); renderAbstract(); recalc(); }
+function absUpd(id,field,val){
+  const r=absRows.find(x=>x.id===id); if(!r)return;
+  r[field]=val;
+  r.amount=n(r.area)*n(r.rate);
+  const aEl=$('absa-'+id);
+  if(aEl) aEl.textContent=r.amount>0?fc(r.amount):'—';
+  if(aEl) aEl.style.color=r.amount>0?'var(--gold)':'var(--dim)';
+  updateAbsGrand(); recalc();
+}
+function updateAbsGrand(){
+  const spTot=specials.reduce((a,s)=>a+n(s.area)*n(s.rate),0);
+  const absTot=absRows.reduce((a,r)=>a+r.amount,0);
+  const grand=absTot+spTot;
+  $('abs-grand').textContent=grand>0?fc(grand):'—';
+}
+
+function addPayment(){
+  payments.push({id:uid(),date:'',mode:'Bank Transfer',amount:'',remarks:''});
+  renderAbstract();
+}
+function delPayment(id){ payments=payments.filter(p=>p.id!==id); renderAbstract(); }
+function payUpd(id,field,val){
+  const p=payments.find(x=>x.id===id); if(!p)return;
+  p[field]=val;
+  // re-render running totals only
+  renderPayRows();
+}
+
+function renderAbstract(){
+  const body=$('abs-body'); if(!body)return;
+  const spTot=specials.reduce((a,s)=>a+n(s.area)*n(s.rate),0);
+  const absTot=absRows.reduce((a,r)=>a+r.amount,0);
+  const grand=absTot+spTot;
+  $('abs-grand').textContent=grand>0?fc(grand):'—';
+
+  body.innerHTML=[
+    ...absRows.map((r,i)=>`<tr>
+      <td style="color:var(--muted);font-size:12px">${i+1}</td>
+      <td><select class="ci" style="width:110px" onchange="absUpd(${r.id},'floor',this.value)">${opts(FLOORS,r.floor)}</select></td>
+      <td><input class="ci" value="${r.desc}" placeholder="Interior Ceiling & Walls" oninput="absUpd(${r.id},'desc',this.value)"></td>
+      <td><select class="ci" style="width:200px" onchange="absUpd(${r.id},'sys',this.value)">${opts(PAINT_SYS,r.sys)}</select></td>
+      <td><select class="ci" style="width:120px" onchange="absUpd(${r.id},'status',this.value)">${opts(STATUS,r.status)}</select></td>
+      <td class="r"><input class="ci r" type="number" value="${r.area}" placeholder="0.00" style="width:80px" oninput="absUpd(${r.id},'area',this.value)"></td>
+      <td class="r"><input class="ci r" type="number" value="${r.rate}" placeholder="0" style="width:70px" oninput="absUpd(${r.id},'rate',this.value)"></td>
+      <td class="r" id="absa-${r.id}" style="color:${r.amount>0?'var(--gold)':'var(--dim)'};font-weight:600;font-size:13px">${r.amount>0?fc(r.amount):'—'}</td>
+      <td><button class="del-btn" onclick="delAbsRow(${r.id})">×</button></td>
+    </tr>`),
+    ...specials.filter(s=>s.area&&s.rate).map((s,i)=>`<tr style="background:#1a1a22">
+      <td style="color:var(--muted);font-size:12px">${absRows.length+i+1}</td>
+      <td style="color:var(--muted);font-size:12px">Special</td>
+      <td style="font-size:12px">${s.desc}</td>
+      <td style="font-size:12px;color:var(--muted)">${s.sys}</td>
+      <td style="font-size:12px;color:var(--muted)">${s.status}</td>
+      <td class="r" style="font-size:12px">${fm(n(s.area))}</td>
+      <td class="r" style="font-size:12px">${s.rate?'₹'+s.rate:'—'}</td>
+      <td class="r" style="color:var(--gold);font-weight:600">${fc(n(s.area)*n(s.rate))}</td>
+      <td></td>
+    </tr>`)
+  ].join('');
+  renderPayRows();
+}
+
+function renderPayRows(){
+  const body=$('pay-body'); if(!body)return;
+  let running=0;
+  body.innerHTML=payments.map(p=>{
+    running+=n(p.amount);
+    return `<tr>
+      <td><input class="ci" value="${p.date}" placeholder="dd/mm/yyyy" style="width:110px" oninput="payUpd(${p.id},'date',this.value)"></td>
+      <td><select class="ci" style="width:130px" onchange="payUpd(${p.id},'mode',this.value)">${opts(MODES,p.mode)}</select></td>
+      <td class="r"><input class="ci r" type="number" value="${p.amount}" placeholder="0" style="width:100px" oninput="payUpd(${p.id},'amount',this.value)"></td>
+      <td><input class="ci" value="${p.remarks}" placeholder="Remarks" oninput="payUpd(${p.id},'remarks',this.value)"></td>
+      <td class="r" style="color:var(--green);font-size:12px;font-weight:600">${fc(running)}</td>
+      <td><button class="del-btn" onclick="delPayment(${p.id})">×</button></td>
+    </tr>`;
+  }).join('');
+  // pay stats
+  const totalPaid=payments.reduce((a,p)=>a+n(p.amount),0);
+  const spTot=specials.reduce((a,s)=>a+n(s.area)*n(s.rate),0);
+  const absTot=absRows.reduce((a,r)=>a+r.amount,0);
+  const grand=absTot+spTot;
+  const bal=grand-totalPaid;
+  $('pay-stats').innerHTML=[
+    sc('Contract Value',fc(grand),'',undefined),
+    sc('Amount Received',fc(totalPaid),'','var(--green)'),
+    sc('Balance Due',fc(bal),'',bal>0?'var(--red)':'var(--green)'),
+  ].join('');
+}
+
+// ═══════════════════════════════════════════
+//  GLOBAL RECALC — header + tab stat cards
+// ═══════════════════════════════════════════
+function recalc(){
+  let ic=0,iw=0;
+  rooms.forEach(r=>{ const c=roomCalc(r); ic+=c.ceil; iw+=c.nett; });
+  $('hs-int').textContent=(ic+iw)>0?fm(ic+iw)+' sft':'— sft';
+  $('int-stats').innerHTML=[
+    sc('Total Ceiling',fm(ic)+' sft','Net paintable',undefined),
+    sc('Total Walls',fm(iw)+' sft','After deductions',undefined),
+    sc('Rooms',rooms.length,'Configured','var(--blue)'),
+    sc('Grand Interior',fm(ic+iw)+' sft','','var(--green)'),
+  ].join('');
+  renderIntSummary();
+
+  let eg=0,ed=0;
+  extSecs.forEach(s=>{ const t=extCalc(s);eg+=t.gross;ed+=t.ded; });
+  const en=eg-ed;
+  $('hs-ext').textContent=en>0?fm(en)+' sft':'— sft';
+  $('ext-stats').innerHTML=[
+    sc('Gross Exterior',fm(eg)+' sft','',undefined),
+    sc('Total Deductions',fm(ed)+' sft','','var(--red)'),
+    sc('Nett Painted Area',fm(en)+' sft','','var(--green)'),
+    sc('Sections',extSecs.length,'Configured','var(--blue)'),
+  ].join('');
+
+  const enTot=enGroups.reduce((a,g)=>a+enGrpTot(g),0);
+  $('hs-en').textContent=enTot>0?fm(enTot)+' sft':'— sft';
+  $('en-stats').innerHTML=[
+    sc('Total Enamel Area',fm(enTot)+' sft','',undefined),
+    sc('Groups',enGroups.length,'Configured','var(--amber)'),
+  ].join('');
+
+  const spTot=specials.reduce((a,s)=>a+n(s.area)*n(s.rate),0);
+  const absTot=absRows.reduce((a,r)=>a+r.amount,0);
+  const grand=absTot+spTot;
+  $('hs-tot').textContent=grand>0?fc(grand):'₹ —';
+  $('abs-stats').innerHTML=[
+    sc('Interior Area',fm(ic+iw)+' sft','Ceilings + Walls',undefined),
+    sc('Exterior Area',fm(en)+' sft','Nett painted',undefined),
+    sc('Enamel Area',fm(enTot)+' sft','D&W',undefined),
+    sc('Grand Total',fc(grand),'All items','var(--green)'),
+  ].join('');
+}
+
+// ═══════════════════════════════════════════
+//  PRINT / PDF
+// ═══════════════════════════════════════════
+function doPrint(){
+  let ic=0,iw=0;
+  rooms.forEach(r=>{ const c=roomCalc(r); ic+=c.ceil; iw+=c.nett; });
+  let eg=0,ed=0;
+  extSecs.forEach(s=>{ const t=extCalc(s);eg+=t.gross;ed+=t.ded; });
+  const extNett=eg-ed;
+  const enTot=enGroups.reduce((a,g)=>a+enGrpTot(g),0);
+  const spTot=specials.reduce((a,s)=>a+n(s.area)*n(s.rate),0);
+  const absTot=absRows.reduce((a,r)=>a+r.amount,0);
+  const grand=absTot+spTot;
+
+  const pName=$('p-name').value||'—';
+  const pClient=$('p-client').value||'—';
+  const pLoc=$('p-location').value||'—';
+  const pDate=$('p-date').value||new Date().toLocaleDateString('en-IN');
+  const pPrep=$('p-prepby').value||'Shakhith';
+  const pScope=$('p-scope').value;
+  const pCat=$('p-category').value;
+  const pNotes=$('p-notes').value;
+
+  const absHTML=[
+    ...absRows.map((r,i)=>`<tr>
+      <td>${i+1}</td><td>${r.floor}</td><td>${r.desc||'—'}</td>
+      <td>${r.sys}</td><td>${r.status}</td>
+      <td class="r">${fm(n(r.area))}</td>
+      <td class="r">${r.rate?'₹'+r.rate:'—'}</td>
+      <td class="r" style="font-weight:600">${r.amount>0?fc(r.amount):'—'}</td>
+    </tr>`),
+    ...specials.filter(s=>s.area&&s.rate).map((s,i)=>`<tr style="background:#fffdf5">
+      <td>${absRows.length+i+1}</td><td>Special</td><td>${s.desc}</td>
+      <td>${s.sys}</td><td>${s.status}</td>
+      <td class="r">${fm(n(s.area))}</td>
+      <td class="r">₹${s.rate}</td>
+      <td class="r" style="font-weight:600">${fc(n(s.area)*n(s.rate))}</td>
+    </tr>`)
+  ].join('');
+
+  const roomHTML=rooms.length?`
+    <div class="pr-sec">Interior — Room Details</div>
+    <table class="pr-tbl">
+      <thead><tr><th>#</th><th>Room</th><th class="r">L</th><th class="r">B</th><th class="r">H</th>
+        <th class="r">Ceiling (sft)</th><th class="r">Nett Walls (sft)</th><th class="r">Total (sft)</th></tr></thead>
+      <tbody>${rooms.map((r,i)=>{ const c=roomCalc(r); return `<tr>
+        <td>${i+1}</td><td>${r.name||'—'}</td>
+        <td class="r">${r.l||'—'}</td><td class="r">${r.b||'—'}</td><td class="r">${r.h||'—'}</td>
+        <td class="r">${fm(c.ceil)}</td><td class="r">${fm(c.nett)}</td>
+        <td class="r" style="font-weight:600">${fm(c.ceil+c.nett)}</td>
+      </tr>`; }).join('')}</tbody>
+      <tfoot><tr><td colspan="5">TOTALS</td>
+        <td class="r">${fm(ic)}</td><td class="r">${fm(iw)}</td>
+        <td class="r" style="color:#2d6a2d">${fm(ic+iw)}</td>
+      </tr></tfoot>
+    </table>`:'';
+
+  $('print-area').innerHTML=`
+    <div class="pr-hdr">
+      <div>
+        <div class="pr-logo">i3d Studio</div>
+        <div class="pr-logo-sub">Inspirational Architecture — Coimbatore</div>
+      </div>
+      <div>
+        <div class="pr-est-title">PAINTING ESTIMATE</div>
+        <div class="pr-meta">Date: ${pDate}</div>
+        <div class="pr-meta">Prepared by: ${pPrep}</div>
+      </div>
+    </div>
+    <table class="pr-info">
+      <tr><td>Project Name</td><td>${pName}</td></tr>
+      <tr><td>Client</td><td>${pClient}</td></tr>
+      <tr><td>Location</td><td>${pLoc}</td></tr>
+      <tr><td>Scope of Work</td><td>${pScope}</td></tr>
+      <tr><td>Painting Category</td><td>${pCat}</td></tr>
+      ${pNotes?`<tr><td>Notes</td><td>${pNotes}</td></tr>`:''}
+    </table>
+    <div class="pr-sec">Area Summary</div>
+    <div class="pr-area-box">
+      <table class="pr-tbl">
+        <thead><tr><th>Item</th><th class="r">Area (sft)</th></tr></thead>
+        <tbody>
+          <tr><td>Interior Ceiling</td><td class="r">${fm(ic)}</td></tr>
+          <tr><td>Interior Walls (Nett)</td><td class="r">${fm(iw)}</td></tr>
+          <tr><td>Exterior Walls (Nett)</td><td class="r">${fm(extNett)}</td></tr>
+          <tr><td>Enamel — D&W</td><td class="r">${fm(enTot)}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    ${roomHTML}
+    <div class="pr-sec">Final Abstract — Painting BOQ</div>
+    <table class="pr-tbl">
+      <thead><tr>
+        <th>#</th><th>Floor</th><th>Description</th><th>System</th><th>Status</th>
+        <th class="r">Area (sft)</th><th class="r">Rate</th><th class="r">Amount (₹)</th>
+      </tr></thead>
+      <tbody>${absHTML}</tbody>
+      <tfoot><tr>
+        <td colspan="7">GRAND TOTAL — PAINTING CONTRACT</td>
+        <td class="r">${fc(grand)}</td>
+      </tr></tfoot>
+    </table>
+    <div class="pr-footer">
+      <span>i3d Studio — Coimbatore | Inspirational Architecture</span>
+      <span>Generated: ${new Date().toLocaleDateString('en-IN')}</span>
+    </div>`;
+
+  window.print();
+}
+
+// ═══════════════ INIT ═══════════════
+(function(){
+  $('p-date').value=new Date().toISOString().slice(0,10);
+
+  // Seed rooms
+  addRoom();
+  const r=rooms[0]; r.name='Hall'; r.l=17; r.b=10; r.h=9.25;
+  r.deds.push({id:uid(),desc:'Doors',w:6.5,h:2.5,cnt:1});
+
+  // Seed exterior
+  addExtSec();
+  extSecs[0].name='South Side';
+  extSecs[0].rows[0]={id:uid(),facing:'South',desc:'Ground Floor',l:29,b:1,h:13.75,cnt:2,cond:'Old'};
+
+  // Seed enamel
+  addEnGroup();
+  enGroups[0].cat='Doors';
+  enGroups[0].rows[0]={id:uid(),room:'Hall',desc:'Main Door',l:6.5,b:3.25,sides:2,cnt:1};
+
+  // Seed abstract
+  addAbsRow('Interior Ceilings & Walls','2C Putty + 2C Tractor Emulsion','Ground Floor');
+  addAbsRow('Interior Ceiling & Walls','Primer + Tractor Emulsion','First Floor');
+  addAbsRow('Exterior Walls','Primer + Asian Ultima (Exterior)','Exterior');
+  addAbsRow('Doors & Windows','Enamel Repainting','Ground Floor');
+  addPayment();
+
+  renderRooms(); renderExt(); renderEnamel(); renderSpecials(); renderAbstract(); recalc();
+})();
+</script>
+</body>
+</html>
