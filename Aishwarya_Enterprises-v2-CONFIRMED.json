@@ -1,0 +1,1684 @@
+{
+  "version": "2.0.0",
+  "savedAt": "2026-11-17T06:26:42.055Z",
+  "estMode": "quick",
+  "quickRateSource": "market_benchmark",
+  "autoSync": true,
+  "project": {
+    "name": "Aishwarya Enterprises",
+    "client": "Mr.Sasikumar",
+    "location": "Coimbatore",
+    "date": "2026-06-08",
+    "prepby": "Shakhith",
+    "scope": "Interior + Exterior",
+    "category": "Standard (₹80–120/sft)",
+    "civil": "200000",
+    "assump": "1. Uninterrupted power and water to be provided at site by client free of cost.\n2. Standard scaffolding / ladder access up to 10 ft height included in base rates.\n3. Adequate drying/curing intervals between primer, putty, and topcoats.",
+    "excl": "1. Civil masonry repairs, replastering, structural cracks, and structural/civil slab or sheet-membrane waterproofing (Note: Surface-applied elastomeric terrace damp-proof protective coating package is included under BOQ Special Finishes).\n2. Moving or dismantling heavy furniture or fixtures.\n3. Exterior suspended scaffolding or specialized staging beyond 2nd floor height.",
+    "notes": ""
+  },
+  "costConfigs": {
+    "cMat": true,
+    "cLab": true,
+    "cPrep": true,
+    "cScaff": true,
+    "cOH": false,
+    "cProf": true,
+    "cGST": true,
+    "ohPct": "10",
+    "profPct": "14",
+    "gstPct": "9",
+    "lModel": "productivity",
+    "painterWage": "1250",
+    "helperWage": "1250",
+    "contractModel": "turnkey_contract",
+    "matTaxBasis": "gst_exclusive",
+    "matInputGstPct": "18",
+    "outwardGstBasis": "on_pretax_contract",
+    "qApplyMarkups": false
+  },
+  "benchmarkRates": {
+    "ic": "9",
+    "iw": "18",
+    "iw_prem": "26",
+    "iw_lux": "38",
+    "ext": "16",
+    "ext_ult": "28",
+    "en": "18",
+    "en_met": "20",
+    "tx": "65",
+    "sp_mel": "110",
+    "cw": "10"
+  },
+  "rooms": [
+    {
+      "id": 1,
+      "name": "Ground Floor -Living / Dining Hall",
+      "l": "16.50",
+      "b": "27.25",
+      "h": "10",
+      "cond": "Repaint",
+      "prep": [
+        "cleaning",
+        "putty",
+        "primer",
+        "crack",
+        "sanding"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 2,
+          "desc": "Main Door ",
+          "w": "3.25",
+          "h": "7.0",
+          "cnt": 1
+        },
+        {
+          "id": 353,
+          "desc": "Door",
+          "w": "3.00",
+          "h": "7.0",
+          "cnt": "3"
+        },
+        {
+          "id": 431,
+          "desc": "Windows",
+          "w": "6.00",
+          "h": "4.5",
+          "cnt": "2"
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 3,
+      "name": "Master Bedroom",
+      "l": "16.50",
+      "b": "10.00",
+      "h": 10,
+      "cond": "Rough",
+      "prep": [
+        "cleaning",
+        "putty",
+        "primer",
+        "crack",
+        "sanding"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-prem",
+      "deds": [
+        {
+          "id": 6,
+          "desc": "Bedroom Door",
+          "w": "3.0",
+          "h": 7,
+          "cnt": 1
+        },
+        {
+          "id": 726,
+          "desc": "Toilet Door",
+          "w": "2.5",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 839,
+          "desc": "Window",
+          "w": "6.0",
+          "h": "4.5",
+          "cnt": 1
+        },
+        {
+          "id": 1498,
+          "desc": "Opening",
+          "w": "6",
+          "h": "7",
+          "cnt": 1
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 980,
+      "name": "Guest Bedroom",
+      "l": "10.0",
+      "b": "10.0",
+      "h": "10.0",
+      "cond": "Rough",
+      "prep": [
+        "cleaning",
+        "putty",
+        "primer",
+        "crack",
+        "sanding"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 1190,
+          "desc": "Door",
+          "w": "3",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 1215,
+          "desc": "Window",
+          "w": "1.5",
+          "h": "4.5",
+          "cnt": "2"
+        },
+        {
+          "id": 1328,
+          "desc": "Window",
+          "w": "4",
+          "h": "4.5",
+          "cnt": 1
+        },
+        {
+          "id": 1417,
+          "desc": "Opening",
+          "w": "6",
+          "h": "7",
+          "cnt": 1
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 1587,
+      "name": "Masterbedroom toilet",
+      "l": "8.5",
+      "b": "4.625",
+      "h": "0",
+      "cond": "Repaint",
+      "prep": [
+        "cleaning",
+        "putty",
+        "primer"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "full_height_tiles"
+    },
+    {
+      "id": 1596,
+      "name": "Common toilet",
+      "l": "6.625",
+      "b": "4.625",
+      "h": "",
+      "cond": "Rough",
+      "prep": [
+        "cleaning",
+        "putty",
+        "primer"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "full_height_tiles"
+    },
+    {
+      "id": 2089,
+      "name": "Kitchen",
+      "l": "10",
+      "b": "13.5",
+      "h": "10",
+      "cond": "Rough",
+      "prep": [
+        "cleaning",
+        "sanding",
+        "putty",
+        "primer",
+        "crack"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 2242,
+          "desc": "Door",
+          "w": "3",
+          "h": "7",
+          "cnt": "2"
+        },
+        {
+          "id": 2275,
+          "desc": "Window",
+          "w": "6",
+          "h": "3.5",
+          "cnt": 1
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 2097,
+      "name": "Utility",
+      "l": "10",
+      "b": "4.75",
+      "h": "10",
+      "cond": "New",
+      "prep": [
+        "cleaning",
+        "sanding",
+        "putty",
+        "primer",
+        "crack"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 2527,
+          "desc": "Door",
+          "w": "2.75",
+          "h": "7",
+          "cnt": "2"
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 5073,
+      "name": "First floor verandah",
+      "l": "39.25",
+      "b": "5",
+      "h": "10",
+      "cond": "Rough",
+      "prep": [
+        "cleaning",
+        "sanding",
+        "putty",
+        "primer",
+        "crack"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 5430,
+          "desc": "Door",
+          "w": "5",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 5501,
+          "desc": "Door",
+          "w": "3",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 5532,
+          "desc": "Window",
+          "w": "4",
+          "h": "4.5",
+          "cnt": "3"
+        },
+        {
+          "id": 5683,
+          "desc": "Openings",
+          "w": "10",
+          "h": "4.5",
+          "cnt": "3"
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 5083,
+      "name": "First Floor Drawing/Dining",
+      "l": "16.5",
+      "b": "27.25",
+      "h": "10",
+      "cond": "Repaint",
+      "prep": [
+        "cleaning",
+        "sanding",
+        "putty",
+        "primer",
+        "crack"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 6331,
+          "desc": "Door",
+          "w": "6",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 6365,
+          "desc": "Door",
+          "w": "3",
+          "h": "7",
+          "cnt": "5"
+        },
+        {
+          "id": 6421,
+          "desc": "Window",
+          "w": "4",
+          "h": "4.5",
+          "cnt": 1
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 5093,
+      "name": "First Floor master bedroom",
+      "l": "16",
+      "b": "10",
+      "h": "10",
+      "cond": "Repaint",
+      "prep": [
+        "cleaning",
+        "sanding",
+        "putty",
+        "primer",
+        "crack"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 7081,
+          "desc": "Door",
+          "w": "3",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 7118,
+          "desc": "Toilet Door",
+          "w": "2.5",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 7311,
+          "desc": "Window",
+          "w": "4",
+          "h": "4.5",
+          "cnt": "2"
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 5103,
+      "name": "First Floor master toilet",
+      "l": "10",
+      "b": "4.625",
+      "h": "",
+      "cond": "Repaint",
+      "prep": [
+        "cleaning",
+        "putty",
+        "primer"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "full_height_tiles"
+    },
+    {
+      "id": 5113,
+      "name": "first Floor Bedroom.2",
+      "l": "16",
+      "b": "10",
+      "h": "10",
+      "cond": "Rough",
+      "prep": [
+        "cleaning",
+        "sanding",
+        "putty",
+        "primer",
+        "crack"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 8396,
+          "desc": "Door",
+          "w": "3",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 8436,
+          "desc": "Toilet Door",
+          "w": "2.5",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 8645,
+          "desc": "Windows",
+          "w": "4",
+          "h": "4.5",
+          "cnt": "2"
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 5123,
+      "name": "First Floor Bedroom.3",
+      "l": "10",
+      "b": "11.25",
+      "h": "10",
+      "cond": "Rough",
+      "prep": [
+        "cleaning",
+        "sanding",
+        "putty",
+        "primer",
+        "crack"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 9304,
+          "desc": "Door",
+          "w": "3",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 9347,
+          "desc": "Toilet Door",
+          "w": "2.5",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 9572,
+          "desc": "Windows",
+          "w": "4",
+          "h": "4.5",
+          "cnt": "2"
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 5133,
+      "name": "First Floor Kitchen",
+      "l": "11",
+      "b": "10",
+      "h": "10",
+      "cond": "Rough",
+      "prep": [
+        "cleaning",
+        "sanding",
+        "putty",
+        "primer",
+        "crack"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 10301,
+          "desc": "Door",
+          "w": "3",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 10347,
+          "desc": "Window",
+          "w": "4",
+          "h": "3.5",
+          "cnt": 1
+        }
+      ],
+      "adds": [
+        {
+          "id": 10513,
+          "desc": "Loft Posts / Reveal",
+          "l": "4",
+          "b": "5",
+          "cnt": "4"
+        }
+      ],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 10605,
+      "name": "First Floor Utility",
+      "l": "5",
+      "b": "10",
+      "h": "10",
+      "cond": "Rough",
+      "prep": [
+        "cleaning",
+        "sanding",
+        "putty",
+        "primer",
+        "crack"
+      ],
+      "ceilSys": "sys-int-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 11085,
+          "desc": "Door",
+          "w": "3",
+          "h": "7",
+          "cnt": 1
+        },
+        {
+          "id": 11102,
+          "desc": "Window",
+          "w": "6",
+          "h": "5",
+          "cnt": 1
+        },
+        {
+          "id": 11279,
+          "desc": "Terrace door",
+          "w": "3",
+          "h": "2.5",
+          "cnt": 1
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    },
+    {
+      "id": 11584,
+      "name": "First Floor Pooja",
+      "l": "5",
+      "b": "6",
+      "h": "10",
+      "cond": "Repaint",
+      "prep": [
+        "cleaning",
+        "sanding",
+        "putty",
+        "primer",
+        "crack"
+      ],
+      "ceilSys": "sys-ceil-std",
+      "wallSys": "sys-int-std",
+      "deds": [
+        {
+          "id": 11978,
+          "desc": "Door",
+          "w": "3",
+          "h": "7",
+          "cnt": 1
+        }
+      ],
+      "adds": [],
+      "notes": "",
+      "open": true,
+      "wallScope": "paint_walls"
+    }
+  ],
+  "extSecs": [
+    {
+      "id": 7,
+      "name": "East Elevation Facade",
+      "facing": "East",
+      "sys": "sys-ext-apex",
+      "cond": "Rough",
+      "scaff": true,
+      "scaffRate": 9,
+      "rows": [
+        {
+          "id": 12,
+          "facing": "East & West",
+          "desc": "Ground to First Floor",
+          "l": "39.25",
+          "b": "0",
+          "h": "24",
+          "cnt": 2
+        },
+        {
+          "id": 2933,
+          "facing": "North & South sides",
+          "desc": "Ground to First Floor",
+          "l": "28.75",
+          "b": "",
+          "h": "24",
+          "cnt": "2"
+        }
+      ],
+      "deds": [
+        {
+          "id": 13,
+          "desc": "Doors",
+          "w": "3.25",
+          "h": "7",
+          "cnt": "4"
+        },
+        {
+          "id": 3763,
+          "desc": "Window Opening",
+          "w": "6",
+          "h": "4.5",
+          "cnt": "3"
+        },
+        {
+          "id": 3818,
+          "desc": "Window Opening",
+          "w": "4",
+          "h": "4.5",
+          "cnt": "2"
+        },
+        {
+          "id": 3900,
+          "desc": "kitchen Window Opening",
+          "w": "4",
+          "h": "3.5",
+          "cnt": 1
+        }
+      ],
+      "open": true
+    }
+  ],
+  "enGroups": [
+    {
+      "id": 14,
+      "cat": "Doors",
+      "substrate": "Wood / Timber",
+      "sys": "sys-en-wood",
+      "cond": "New",
+      "rows": [
+        {
+          "id": 14467,
+          "room": "G.floor Internal doors",
+          "desc": "Skin doors",
+          "l": "3",
+          "b": "7",
+          "sides": 2,
+          "cnt": "3"
+        }
+      ],
+      "open": true
+    },
+    {
+      "id": 21,
+      "cat": "Grilles & Gates",
+      "substrate": "Ferrous Metal / Steel",
+      "sys": "sys-en-metal",
+      "cond": "New",
+      "rows": [
+        {
+          "id": 28,
+          "room": "Gfloor Window grill",
+          "desc": "Windows w6",
+          "l": "6",
+          "b": "4.5",
+          "sides": 2,
+          "cnt": "4.5"
+        },
+        {
+          "id": 18394,
+          "room": "Gfloor Window grill",
+          "desc": "Windows w4",
+          "l": "4",
+          "b": "4.5",
+          "sides": 2,
+          "cnt": "3.0"
+        },
+        {
+          "id": 18594,
+          "room": "Gfloor Window grill",
+          "desc": "Windows w1.5",
+          "l": "1.5",
+          "b": "4.5",
+          "sides": 2,
+          "cnt": "3.0"
+        },
+        {
+          "id": 18829,
+          "room": "Gfloor Utility",
+          "desc": "Safety door",
+          "l": "2.5",
+          "b": "7",
+          "sides": 2,
+          "cnt": "3.0"
+        },
+        {
+          "id": 19568,
+          "room": "Gfloor Kitchen Window grill",
+          "desc": "window kw6",
+          "l": "6",
+          "b": "3.5",
+          "sides": 2,
+          "cnt": "1.5"
+        }
+      ],
+      "open": true
+    },
+    {
+      "id": 21315,
+      "cat": "Doors",
+      "substrate": "Wood / Timber",
+      "sys": "sys-en-wood",
+      "cond": "New",
+      "rows": [
+        {
+          "id": 21880,
+          "room": "First floor Drawing /Dining room",
+          "desc": "Skin Door",
+          "l": "3",
+          "b": "7",
+          "sides": 2,
+          "cnt": "7.5"
+        },
+        {
+          "id": 22717,
+          "room": "Windows",
+          "desc": "Drawing room Window fw6",
+          "l": "6",
+          "b": "7",
+          "sides": 2,
+          "cnt": "1.5"
+        },
+        {
+          "id": 23345,
+          "room": "Windows",
+          "desc": "master bedroom",
+          "l": "4",
+          "b": "4.5",
+          "sides": 2,
+          "cnt": "3"
+        },
+        {
+          "id": 23764,
+          "room": "ventilator",
+          "desc": "master bedroom",
+          "l": "3",
+          "b": "2",
+          "sides": 2,
+          "cnt": "1.5"
+        },
+        {
+          "id": 24031,
+          "room": "Windows",
+          "desc": "guest bedroom.1",
+          "l": "4",
+          "b": "4.5",
+          "sides": 2,
+          "cnt": "3.0"
+        },
+        {
+          "id": 24317,
+          "room": "ventilator",
+          "desc": "guest bedroom.1",
+          "l": "3",
+          "b": "2",
+          "sides": 2,
+          "cnt": "1.5"
+        },
+        {
+          "id": 24584,
+          "room": "Windows",
+          "desc": "guest bedroom.2",
+          "l": "4",
+          "b": "4.5",
+          "sides": 2,
+          "cnt": "3.0"
+        },
+        {
+          "id": 24756,
+          "room": "Pooja door",
+          "desc": "teak door",
+          "l": "3",
+          "b": "7",
+          "sides": 2,
+          "cnt": "1.5"
+        },
+        {
+          "id": 25175,
+          "room": "Windows",
+          "desc": "Kitchen",
+          "l": "6",
+          "b": "3.5",
+          "sides": 2,
+          "cnt": "1.5"
+        },
+        {
+          "id": 25841,
+          "room": "FIrst floor Utility",
+          "desc": "Fixed window",
+          "l": "6",
+          "b": "2",
+          "sides": 2,
+          "cnt": "1.5"
+        }
+      ],
+      "open": true
+    },
+    {
+      "id": 21373,
+      "cat": "Grilles & Gates",
+      "substrate": "Ferrous Metal / Steel",
+      "sys": "sys-en-metal",
+      "cond": "New",
+      "rows": [
+        {
+          "id": 21374,
+          "room": "Drawing room",
+          "desc": "Grill",
+          "l": "5",
+          "b": "7",
+          "sides": 2,
+          "cnt": "1.5"
+        },
+        {
+          "id": 26907,
+          "room": "Master bedroom",
+          "desc": "Grill",
+          "l": "4",
+          "b": "4.5",
+          "sides": 2,
+          "cnt": "3.0"
+        },
+        {
+          "id": 27328,
+          "room": "Guest bedroom.1",
+          "desc": "Grill",
+          "l": "4",
+          "b": "4.5",
+          "sides": 2,
+          "cnt": "6.0"
+        },
+        {
+          "id": 27669,
+          "room": "Kitchen",
+          "desc": "Grill",
+          "l": "6",
+          "b": "3.5",
+          "sides": 2,
+          "cnt": "1.5"
+        },
+        {
+          "id": 27970,
+          "room": "utility Grill window",
+          "desc": "Grill",
+          "l": "8",
+          "b": "2",
+          "sides": 2,
+          "cnt": "1.5"
+        }
+      ],
+      "open": true
+    }
+  ],
+  "specials": [
+    {
+      "id": 29,
+      "desc": "First Floor  Exterior Surface — Rustic Texture",
+      "area": "1000",
+      "sys": "sys-sp-texture",
+      "rate": "60",
+      "status": "Completed",
+      "pricingBasis": "agreed_package",
+      "marginTreatment": "margin_embedded",
+      "gstTreatment": "gst_inclusive_package",
+      "gstVerificationStatus": "architect_confirmed_gst_inclusive",
+      "gstVerificationNote": "Architect-confirmed commercial decision (Stage 5.2): Separately contracted Rs.60,000 exterior rustic texture package is margin-embedded and GST-inclusive (Rs.0 additional profit, Rs.0 additional outward GST, Rs.60,000 final package amount).",
+      "consumablesTreatment": "included_in_package"
+    },
+    {
+      "id": 4423,
+      "desc": "Main Door Polish",
+      "area": "42",
+      "sys": "sys-sp-melamyne",
+      "rate": "230",
+      "status": "Completed"
+    },
+    {
+      "id": 4721,
+      "desc": "First Floor Main Door Polish",
+      "area": "105",
+      "sys": "sys-sp-melamyne",
+      "rate": "230",
+      "status": "Completed"
+    },
+    {
+      "id": 12591,
+      "desc": "Terrace Waterproofing",
+      "area": "1000",
+      "sys": "sys-sp-waterproof",
+      "rate": "50",
+      "status": "Completed",
+      "pricingBasis": "agreed_package",
+      "bomTreatment": "package_exclude_bom"
+    },
+    {
+      "id": 13150,
+      "desc": "Paver tiles painting",
+      "area": "1000",
+      "sys": "sys-sp-texture",
+      "rate": "45",
+      "status": "Completed"
+    },
+    {
+      "id": 13656,
+      "desc": "Portico roofing Sheet Inner",
+      "area": "350",
+      "sys": "sys-sp-melamyne",
+      "rate": "40",
+      "status": "Completed"
+    }
+  ],
+  "renItems": [
+    {
+      "id": 30631,
+      "catId": "substrate_cond",
+      "num": 1,
+      "label": "1. Existing Substrate Condition (Hollow / Drummy / Spalling)",
+      "zone": "All Interior Rooms",
+      "basis": "Surface Inspection & Sounding",
+      "severity": "Moderate",
+      "qty": "",
+      "unit": "sft",
+      "matRate": 0,
+      "labRate": 2,
+      "equipCost": 0,
+      "opLock": null,
+      "scopeClassification": "civil_prerequisite",
+      "inspectionWarning": "⚠️ Requires On-Site Structural / Civil Inspection — Do not treat hollow or spalling plaster as ordinary painting prep.",
+      "assump": "Acoustic sounding of plaster prior to work.",
+      "excl": "Structural concrete/brickwork reconstruction."
+    }
+  ],
+  "absRows": [
+    {
+      "id": 32912,
+      "floor": "Interior Ceilings",
+      "desc": "Ceiling (All Applicable Rooms): Surface dusting, primer & 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 2251.703125,
+      "rate": 18,
+      "amount": 40531,
+      "auto": true
+    },
+    {
+      "id": 32913,
+      "floor": "Interior Ceilings",
+      "desc": "Ceiling (First Floor Pooja): Surface dusting, primer & Primer + Tractor Emulsion (Ceiling White) (Asian Paints)",
+      "sys": "Primer + Tractor Emulsion (Ceiling White)",
+      "status": "Completed",
+      "area": 30,
+      "rate": 9,
+      "amount": 270,
+      "auto": true
+    },
+    {
+      "id": 32914,
+      "floor": "Interior Walls",
+      "desc": "Ground Floor -Living / Dining Hall Walls: Repaint condition, cleaning, putty, primer, crack, sanding, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 735.25,
+      "rate": 18,
+      "amount": 13235,
+      "auto": true
+    },
+    {
+      "id": 32915,
+      "floor": "Interior Walls",
+      "desc": "Master Bedroom Walls: Rough condition, cleaning, putty, primer, crack, sanding, 2C Putty + 2C Apcolite Premium Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Apcolite Premium Emulsion",
+      "status": "Completed",
+      "area": 422.5,
+      "rate": 26,
+      "amount": 10985,
+      "auto": true
+    },
+    {
+      "id": 32916,
+      "floor": "Interior Walls",
+      "desc": "Guest Bedroom Walls: Rough condition, cleaning, putty, primer, crack, sanding, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 305.5,
+      "rate": 18,
+      "amount": 5499,
+      "auto": true
+    },
+    {
+      "id": 32917,
+      "floor": "Interior Walls",
+      "desc": "Kitchen Walls: Rough condition, cleaning, sanding, putty, primer, crack, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 407,
+      "rate": 18,
+      "amount": 7326,
+      "auto": true
+    },
+    {
+      "id": 32918,
+      "floor": "Interior Walls",
+      "desc": "Utility Walls: New condition, cleaning, sanding, putty, primer, crack, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 256.5,
+      "rate": 18,
+      "amount": 4617,
+      "auto": true
+    },
+    {
+      "id": 32919,
+      "floor": "Interior Walls",
+      "desc": "First floor verandah Walls: Rough condition, cleaning, sanding, putty, primer, crack, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 640,
+      "rate": 18,
+      "amount": 11520,
+      "auto": true
+    },
+    {
+      "id": 32920,
+      "floor": "Interior Walls",
+      "desc": "First Floor Drawing/Dining Walls: Repaint condition, cleaning, sanding, putty, primer, crack, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 710,
+      "rate": 18,
+      "amount": 12780,
+      "auto": true
+    },
+    {
+      "id": 32921,
+      "floor": "Interior Walls",
+      "desc": "First Floor master bedroom Walls: Repaint condition, cleaning, sanding, putty, primer, crack, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 445.5,
+      "rate": 18,
+      "amount": 8019,
+      "auto": true
+    },
+    {
+      "id": 32922,
+      "floor": "Interior Walls",
+      "desc": "first Floor Bedroom.2 Walls: Rough condition, cleaning, sanding, putty, primer, crack, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 445.5,
+      "rate": 18,
+      "amount": 8019,
+      "auto": true
+    },
+    {
+      "id": 32923,
+      "floor": "Interior Walls",
+      "desc": "First Floor Bedroom.3 Walls: Rough condition, cleaning, sanding, putty, primer, crack, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 350.5,
+      "rate": 18,
+      "amount": 6309,
+      "auto": true
+    },
+    {
+      "id": 32924,
+      "floor": "Interior Walls",
+      "desc": "First Floor Kitchen Walls: Rough condition, cleaning, sanding, putty, primer, crack, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 465,
+      "rate": 18,
+      "amount": 8370,
+      "auto": true
+    },
+    {
+      "id": 32925,
+      "floor": "Interior Walls",
+      "desc": "First Floor Utility Walls: Rough condition, cleaning, sanding, putty, primer, crack, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 241.5,
+      "rate": 18,
+      "amount": 4347,
+      "auto": true
+    },
+    {
+      "id": 32926,
+      "floor": "Interior Walls",
+      "desc": "First Floor Pooja Walls: Repaint condition, cleaning, sanding, putty, primer, crack, 2C Putty + 2C Tractor Emulsion (Asian Paints)",
+      "sys": "2C Putty + 2C Tractor Emulsion",
+      "status": "Completed",
+      "area": 199,
+      "rate": 18,
+      "amount": 3582,
+      "auto": true
+    },
+    {
+      "id": 32927,
+      "floor": "Exterior",
+      "desc": "Exterior East Elevation Facade (East): High-pressure wash, 1 coat primer & 2 coats Primer + 2C Apex Weatherproof Emulsion (Includes scaffolding)",
+      "sys": "Primer + 2C Apex Weatherproof Emulsion",
+      "status": "Completed",
+      "area": 3042,
+      "rate": 16,
+      "amount": 48672,
+      "auto": true
+    },
+    {
+      "id": 32928,
+      "floor": "Doors & Windows",
+      "desc": "Enamel Finish to Doors (Wood / Timber): Surface preparation, Wood Primer Pink & 2 coats Premium Satin Enamel",
+      "sys": "Pink Primer + 2C Satin Enamel (Woodwork)",
+      "status": "Completed",
+      "area": 126,
+      "rate": 18,
+      "amount": 2268,
+      "auto": true
+    },
+    {
+      "id": 32929,
+      "floor": "Doors & Windows",
+      "desc": "Enamel Finish to Grilles & Gates (Ferrous Metal / Steel): Surface preparation, Red Oxide Zinc Chromate Metal Primer & 2 coats Synthetic Gloss Enamel",
+      "sys": "Red Oxide Primer + 2C Enamel (Metal & Grilles)",
+      "status": "Completed",
+      "area": 559.5,
+      "rate": 20,
+      "amount": 11190,
+      "auto": true
+    },
+    {
+      "id": 32930,
+      "floor": "Doors & Windows",
+      "desc": "Enamel Finish to Doors (Wood / Timber): Surface preparation, Wood Primer Pink & 2 coats Premium Satin Enamel",
+      "sys": "Pink Primer + 2C Satin Enamel (Woodwork)",
+      "status": "Completed",
+      "area": 963,
+      "rate": 18,
+      "amount": 17334,
+      "auto": true
+    },
+    {
+      "id": 32931,
+      "floor": "Doors & Windows",
+      "desc": "Enamel Finish to Grilles & Gates (Ferrous Metal / Steel): Surface preparation, Red Oxide Zinc Chromate Metal Primer & 2 coats Synthetic Gloss Enamel",
+      "sys": "Red Oxide Primer + 2C Enamel (Metal & Grilles)",
+      "status": "Completed",
+      "area": 540,
+      "rate": 20,
+      "amount": 10800,
+      "auto": true
+    }
+  ],
+  "payments": [],
+  "SYSTEMS_LIB": [
+    {
+      "id": "sys-int-std",
+      "name": "2C Putty + 2C Tractor Emulsion",
+      "category": "Interior",
+      "substrate": "Interior Masonry",
+      "manufacturer": "Asian Paints",
+      "source": "Asian Paints Tractor Emulsion TDS (Doc Ref: AP-TE-2024)",
+      "applicationMethod": "Brush & Roller",
+      "prep": "Cleaning, Sanding, 2C Putty",
+      "primer": {
+        "product": "Interior Wall Primer (Water Thinnable)",
+        "manufacturerSource": "Asian Paints Decoprime WT",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 130,
+        "unit": "sft/L",
+        "coats": 1,
+        "price": 180
+      },
+      "putty": {
+        "product": "Acrylic Wall Putty",
+        "manufacturerSource": "Asian Paints TruCare Acrylic Wall Putty",
+        "coverageBasis": "system_total",
+        "workingCoverage": 16,
+        "unit": "sft/kg",
+        "coats": 2,
+        "price": 28
+      },
+      "topcoat": {
+        "product": "Tractor Emulsion",
+        "manufacturerSource": "Asian Paints Tractor Emulsion",
+        "coverageBasis": "system_total",
+        "workingCoverage": 65,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 190
+      },
+      "wastage": 10,
+      "quickRate": 18,
+      "labourRate": 8,
+      "productivity": {
+        "scraping": 350,
+        "putty": 250,
+        "sanding": 400,
+        "painting": 300
+      }
+    },
+    {
+      "id": "sys-ceil-std",
+      "name": "Primer + Tractor Emulsion (Ceiling White)",
+      "category": "Interior",
+      "substrate": "POP / Gypsum Board",
+      "manufacturer": "Asian Paints",
+      "source": "Asian Paints Ceiling Systems TDS",
+      "applicationMethod": "Roller & Brush",
+      "prep": "Dusting, Primer, 2C Topcoat",
+      "primer": {
+        "product": "Interior Primer",
+        "manufacturerSource": "Asian Paints Decoprime",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 130,
+        "unit": "sft/L",
+        "coats": 1,
+        "price": 180
+      },
+      "putty": null,
+      "topcoat": {
+        "product": "Tractor Emulsion (Ceiling White)",
+        "manufacturerSource": "Asian Paints Tractor Ceiling White",
+        "coverageBasis": "system_total",
+        "workingCoverage": 70,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 180
+      },
+      "wastage": 10,
+      "quickRate": 9,
+      "labourRate": 5,
+      "productivity": {
+        "scraping": 400,
+        "putty": 9999,
+        "sanding": 500,
+        "painting": 320
+      }
+    },
+    {
+      "id": "sys-int-prem",
+      "name": "2C Putty + 2C Apcolite Premium Emulsion",
+      "category": "Interior",
+      "substrate": "Interior Masonry",
+      "manufacturer": "Asian Paints",
+      "source": "Asian Paints Apcolite Premium Emulsion TDS",
+      "applicationMethod": "Fine Microfiber Roller",
+      "prep": "Scraping, 2C Putty, Sanding",
+      "primer": {
+        "product": "Decoprime Interior Primer",
+        "manufacturerSource": "Asian Paints Decoprime",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 130,
+        "unit": "sft/L",
+        "coats": 1,
+        "price": 210
+      },
+      "putty": {
+        "product": "Birla White WallSeal / TruCare Putty",
+        "manufacturerSource": "Birla White / Asian Paints",
+        "coverageBasis": "system_total",
+        "workingCoverage": 16,
+        "unit": "sft/kg",
+        "coats": 2,
+        "price": 32
+      },
+      "topcoat": {
+        "product": "Apcolite Premium Satin Emulsion",
+        "manufacturerSource": "Asian Paints Apcolite",
+        "coverageBasis": "system_total",
+        "workingCoverage": 60,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 380
+      },
+      "wastage": 10,
+      "quickRate": 26,
+      "labourRate": 10,
+      "productivity": {
+        "scraping": 320,
+        "putty": 220,
+        "sanding": 350,
+        "painting": 280
+      }
+    },
+    {
+      "id": "sys-int-lux",
+      "name": "Full Putty + 2C Royale Luxury Emulsion",
+      "category": "Interior",
+      "substrate": "Interior Masonry",
+      "manufacturer": "Asian Paints",
+      "source": "Asian Paints Royale Luxury Emulsion TDS",
+      "applicationMethod": "High Density Foam / Flocked Roller",
+      "prep": "Fine Sanding, 3C Putty, Decoprime",
+      "primer": {
+        "product": "Royale Base Primer",
+        "manufacturerSource": "Asian Paints Royale Primer",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 130,
+        "unit": "sft/L",
+        "coats": 1,
+        "price": 240
+      },
+      "putty": {
+        "product": "Super Fine Acrylic Putty",
+        "manufacturerSource": "Asian Paints Royale Glide Acrylic Putty",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 13,
+        "unit": "sft/kg",
+        "coats": 3,
+        "price": 36
+      },
+      "topcoat": {
+        "product": "Royale Luxury Emulsion (Teflon)",
+        "manufacturerSource": "Asian Paints Royale Luxury TDS",
+        "coverageBasis": "system_total",
+        "workingCoverage": 55,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 580
+      },
+      "wastage": 10,
+      "quickRate": 38,
+      "labourRate": 14,
+      "productivity": {
+        "scraping": 300,
+        "putty": 180,
+        "sanding": 250,
+        "painting": 220
+      }
+    },
+    {
+      "id": "sys-ext-apex",
+      "name": "Primer + 2C Apex Weatherproof Emulsion",
+      "category": "Exterior",
+      "substrate": "Exterior Plaster",
+      "manufacturer": "Asian Paints",
+      "source": "Asian Paints Apex Weatherproof TDS",
+      "applicationMethod": "Exterior Long-nap Roller & Brush",
+      "prep": "Wire Brushing, High Pressure Wash, Primer",
+      "primer": {
+        "product": "Exterior Wall Primer",
+        "manufacturerSource": "Asian Paints Exterior Primer",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 110,
+        "unit": "sft/L",
+        "coats": 1,
+        "price": 210
+      },
+      "putty": null,
+      "topcoat": {
+        "product": "Apex Weatherproof Exterior Emulsion",
+        "manufacturerSource": "Asian Paints Apex TDS",
+        "coverageBasis": "system_total",
+        "workingCoverage": 55,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 360
+      },
+      "wastage": 12,
+      "quickRate": 16,
+      "labourRate": 7,
+      "productivity": {
+        "scraping": 300,
+        "putty": 9999,
+        "sanding": 400,
+        "painting": 280
+      }
+    },
+    {
+      "id": "sys-ext-ultima",
+      "name": "Primer + 2C Apex Ultima Protek (High Performance)",
+      "category": "Exterior",
+      "substrate": "Exterior Plaster",
+      "manufacturer": "Asian Paints",
+      "source": "Asian Paints Apex Ultima Protek System TDS",
+      "applicationMethod": "Heavy Duty Textured Roller",
+      "prep": "Washing, Bio-wash, Penetrating Primer",
+      "primer": {
+        "product": "Ultima Protek Basecoat",
+        "manufacturerSource": "Asian Paints Protek Basecoat",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 95,
+        "unit": "sft/L",
+        "coats": 1,
+        "price": 310
+      },
+      "putty": null,
+      "topcoat": {
+        "product": "Apex Ultima Protek Topcoat",
+        "manufacturerSource": "Asian Paints Ultima Protek TDS",
+        "coverageBasis": "system_total",
+        "workingCoverage": 48,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 520
+      },
+      "wastage": 12,
+      "quickRate": 28,
+      "labourRate": 10,
+      "productivity": {
+        "scraping": 280,
+        "putty": 9999,
+        "sanding": 380,
+        "painting": 250
+      }
+    },
+    {
+      "id": "sys-en-wood",
+      "name": "Pink Primer + 2C Satin Enamel (Woodwork)",
+      "category": "Enamel",
+      "substrate": "Wood / Timber",
+      "manufacturer": "Berger / Asian Paints",
+      "source": "Wood Finishing Technical Guide",
+      "applicationMethod": "Fine Bristle Brush",
+      "prep": "Wood Sanding, Knot Sealing, Pink Primer",
+      "primer": {
+        "product": "Wood Primer Pink",
+        "manufacturerSource": "Asian Paints Wood Primer Pink",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 110,
+        "unit": "sft/L",
+        "coats": 1,
+        "price": 240
+      },
+      "putty": null,
+      "topcoat": {
+        "product": "Premium Satin Enamel",
+        "manufacturerSource": "Apcolite Premium Satin Enamel",
+        "coverageBasis": "system_total",
+        "workingCoverage": 95,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 390
+      },
+      "wastage": 8,
+      "quickRate": 18,
+      "labourRate": 9,
+      "productivity": {
+        "scraping": 250,
+        "putty": 9999,
+        "sanding": 300,
+        "painting": 220
+      }
+    },
+    {
+      "id": "sys-en-metal",
+      "name": "Red Oxide Primer + 2C Enamel (Metal & Grilles)",
+      "category": "Enamel",
+      "substrate": "Ferrous Metal / Steel",
+      "manufacturer": "Berger / Asian Paints",
+      "source": "IS 2074 Specification for Metal Primers",
+      "applicationMethod": "Round Brush & Mitre",
+      "prep": "Rust Chipping, Wire Brushing, Red Oxide Primer",
+      "primer": {
+        "product": "Red Oxide Zinc Chromate Metal Primer",
+        "manufacturerSource": "Berger Red Oxide Primer",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 120,
+        "unit": "sft/L",
+        "coats": 1,
+        "price": 220
+      },
+      "putty": null,
+      "topcoat": {
+        "product": "Synthetic Gloss Enamel",
+        "manufacturerSource": "Asian Paints Apcolite Premium Gloss Enamel",
+        "coverageBasis": "system_total",
+        "workingCoverage": 95,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 390
+      },
+      "wastage": 15,
+      "quickRate": 20,
+      "labourRate": 11,
+      "productivity": {
+        "scraping": 200,
+        "putty": 9999,
+        "sanding": 250,
+        "painting": 180
+      }
+    },
+    {
+      "id": "sys-sp-texture",
+      "name": "Texture Painting (Roller / Trowel Applied)",
+      "category": "Special",
+      "substrate": "Special / Concrete",
+      "manufacturer": "Asian Paints",
+      "source": "Asian Paints Royale Play Texture Guide",
+      "applicationMethod": "Steel Trowel / Honeycomb Roller",
+      "prep": "Surface Leveling, Exterior Primer",
+      "primer": {
+        "product": "Exterior Primer Base",
+        "manufacturerSource": "Asian Paints Primer Base",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 110,
+        "unit": "sft/L",
+        "coats": 1,
+        "price": 210
+      },
+      "putty": {
+        "product": "Acrylic Texture Compound Paste",
+        "manufacturerSource": "Asian Paints Royale Play Texture",
+        "coverageBasis": "system_total",
+        "workingCoverage": 3.5,
+        "unit": "sft/kg",
+        "coats": 1,
+        "price": 45
+      },
+      "topcoat": {
+        "product": "Silicone Protective Glaze Coat",
+        "manufacturerSource": "Royale Play Protective Coat",
+        "coverageBasis": "system_total",
+        "workingCoverage": 60,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 420
+      },
+      "wastage": 12,
+      "quickRate": 65,
+      "labourRate": 22,
+      "productivity": {
+        "scraping": 300,
+        "putty": 120,
+        "sanding": 9999,
+        "painting": 150
+      }
+    },
+    {
+      "id": "sys-sp-melamyne",
+      "name": "Melamine Full Polish (Veneer / Teak)",
+      "category": "Special",
+      "substrate": "Wood / Timber",
+      "manufacturer": "Asian Paints / MRF",
+      "source": "Woodtech Melamine Polish TDS",
+      "applicationMethod": "Spray / Muslin Cloth Polish Pad",
+      "prep": "Emery 180/320 Sanding, Wood Filler",
+      "primer": {
+        "product": "Melamine Sanding Sealer",
+        "manufacturerSource": "Asian Paints Woodtech Sealer",
+        "coverageBasis": "per_coat",
+        "workingCoverage": 70,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 360
+      },
+      "putty": null,
+      "topcoat": {
+        "product": "Melamine Gloss / Matt Topcoat",
+        "manufacturerSource": "Asian Paints Woodtech Melamine",
+        "coverageBasis": "system_total",
+        "workingCoverage": 60,
+        "unit": "sft/L",
+        "coats": 2,
+        "price": 440
+      },
+      "wastage": 10,
+      "quickRate": 110,
+      "labourRate": 45,
+      "productivity": {
+        "scraping": 9999,
+        "putty": 9999,
+        "sanding": 150,
+        "painting": 100
+      }
+    }
+  ],
+  "_id": 32931
+}
